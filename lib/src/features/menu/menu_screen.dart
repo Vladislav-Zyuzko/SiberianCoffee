@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -8,7 +10,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  
+
   @override
   void initState() {
     super.initState();
@@ -16,6 +18,6 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   build(BuildContext context) {
-    return const Scaffold(body: Center());
+    return Scaffold(body: Text(AppLocalizations.of(context)!.black_coffee));
   }
 }

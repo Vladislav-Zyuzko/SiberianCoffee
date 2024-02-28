@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/menu/menu_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SiberianCoffeeApp extends StatelessWidget {
   const SiberianCoffeeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
       title: 'SiberianCoffee',
-      home: MenuScreen(),
+      home: const MenuScreen(),
     );
   }
 }
