@@ -1,17 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:siberian_coffee/src/app.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'SiberianCoffee',
-      home: Text(""),
-    );
-  }
+  runZonedGuarded(() => runApp(const SiberianCoffeeApp()), (error, stack) {
+    log(error.toString(), name: 'App Error', stackTrace: stack);
+  });
 }
