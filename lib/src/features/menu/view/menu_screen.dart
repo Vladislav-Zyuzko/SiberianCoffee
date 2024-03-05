@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siberian_coffee/src/theme/image_sources.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -17,7 +18,8 @@ class _MenuScreenState extends State<MenuScreen> {
   build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset("assets/images/author_oleato.png", height: 300, fit: BoxFit.contain),
+        child: Image.asset(ImageSources.teaRed,
+            height: 300, fit: BoxFit.contain),
       ),
     );
   }
