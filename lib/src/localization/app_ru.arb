@@ -1,7 +1,7 @@
 {
     "title": "Сибирская кофейня",
-    "black_coffee": "Черный кофе",
-    "coffee_with_milk": "Кофе с молоком",
-    "tea": "Чай",
-    "authors_drinks": "Авторские напитки"
+    "categoryBlackCoffee": "Черный кофе",
+    "categoryCoffeeWithMilk": "Кофе с молоком",
+    "categoryTeaDrink": "Чай",
+    "categoryAuthorDrinks": "Авторские напитки",
 }
