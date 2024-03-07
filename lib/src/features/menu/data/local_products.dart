@@ -1,7 +1,8 @@
+import 'package:siberian_coffee/src/features/menu/data/enums/product_categories.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/theme/image_sources.dart';
 
-const List<Product> productList = [
+List<Product> productList = [
   Product(
     imagePath: ImageSources.authorCoffeeCaramel,
     productName: "Кофе с карамельным мороженым и солью",
