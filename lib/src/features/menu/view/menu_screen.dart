@@ -40,6 +40,17 @@ class _MenuScreenState extends State<MenuScreen> {
     });
   }
 
+  void showActiveCategory(GlobalKey categoryKey) {
+    final targetContext = categoryKey.currentContext;
+    if (targetContext != null) {
+      Scrollable.ensureVisible(
+        targetContext,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   @override
   build(BuildContext context) {
     return Scaffold(
@@ -67,6 +78,9 @@ class _MenuScreenState extends State<MenuScreen> {
                           onTap: () {
                             setActiveCategory(index);
                             scrollToBeginning(appBarScrollController);
+                            showActiveCategory(
+                                categoriesList[orderCategories[activeCategoryIndex]]
+                                    .categoryKey);
                           },
                           categoryName: categoriesList[orderCategories[index]]
                               .categoryName,
@@ -89,6 +103,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             .toList();
                     return [
                       SliverToBoxAdapter(
+                        key: category.categoryKey,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 10),
