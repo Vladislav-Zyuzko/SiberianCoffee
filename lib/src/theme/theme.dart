@@ -6,5 +6,6 @@ final lightTheme = ThemeData(
   scaffoldBackgroundColor: AppColors.dimWhite,
   textTheme: const TextTheme(
     titleMedium: AppFonts.titleMedium,
+    bodySmall: AppFonts.bodySmall,
   ),
 );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/purchase_controller.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -11,10 +12,17 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 180,
-      height: 196,
+      height: 250,
       decoration: BoxDecoration(
         color: AppColors.primaryWhite,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+           BoxShadow(
+            color: AppColors.dimBlack,
+            blurRadius: 4,
+            spreadRadius: -1.5,
+          ),
+        ]
       ),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       child: Column(
@@ -27,7 +35,11 @@ class ProductCard extends StatelessWidget {
           Text(
             product.productName,
             style: Theme.of(context).textTheme.titleMedium,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
           ),
+          PurchaseControllPanel(productCost: product.productCost)
         ],
       ),
     );

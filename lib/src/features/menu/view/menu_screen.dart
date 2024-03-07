@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:siberian_coffee/src/theme/image_sources.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/product_card.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_data.dart';
 
@@ -20,7 +19,7 @@ class _MenuScreenState extends State<MenuScreen> {
   build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ProductCard(product: productList[1]),
+        child: ProductCard(product: productList[18]),
       ),
     );
   }
