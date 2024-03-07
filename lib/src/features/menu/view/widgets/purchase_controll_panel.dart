@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PurchaseControllPanel extends StatefulWidget {
   final double productCost;
@@ -57,7 +58,7 @@ class PurchaseControllBuyButton extends StatelessWidget {
           height: 24,
           width: 116,
           child: Center(
-            child: Text("$productCost руб",
+            child: Text("$productCost ${AppLocalizations.of(context)!.shortRub}",
                 style: Theme.of(context).textTheme.bodySmall),
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
-import 'package:siberian_coffee/src/features/menu/view/widgets/purchase_controller.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/purchase_controll_panel.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
