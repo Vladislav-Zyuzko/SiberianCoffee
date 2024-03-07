@@ -18,9 +18,19 @@ class _MenuScreenState extends State<MenuScreen> {
       List.generate(categoriesList.length, (index) => index);
   int activeCategoryIndex = 0;
 
+  ScrollController appBarScrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+  }
+
+  void scrollToBeginning(ScrollController scrollController) {
+    scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
   }
 
   void setActiveCategory(int index) {
@@ -49,12 +59,17 @@ class _MenuScreenState extends State<MenuScreen> {
                           padding: EdgeInsets.only(left: 10),
                         );
                       }),
+                      controller: appBarScrollController,
                       scrollDirection: Axis.horizontal,
                       itemCount: orderCategories.length,
                       itemBuilder: ((context, index) {
                         return CategoryButton(
-                          onTap: () => setActiveCategory(index),
-                          categoryName: categoriesList[orderCategories[index]].categoryName,
+                          onTap: () {
+                            setActiveCategory(index);
+                            scrollToBeginning(appBarScrollController);
+                          },
+                          categoryName: categoriesList[orderCategories[index]]
+                              .categoryName,
                           active: index == activeCategoryIndex,
                         );
                       }),
