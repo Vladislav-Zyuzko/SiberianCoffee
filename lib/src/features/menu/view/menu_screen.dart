@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_categories.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_products.dart';
@@ -19,10 +20,32 @@ class _MenuScreenState extends State<MenuScreen> {
   int activeCategoryIndex = 0;
 
   ScrollController appBarScrollController = ScrollController();
+  ScrollController contentScrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+
+    contentScrollController.addListener(() {
+      List<double> categoriesOrdinatesList = List.generate(
+          categoriesList.length, (index) => getOrdinateCategory(index));
+      int nearCategoryIndex = categoriesOrdinatesList.indexOf(
+        categoriesOrdinatesList
+            .reduce((curr, next) => curr < next ? curr : next),
+      );
+      if (nearCategoryIndex != orderCategories[0]) {
+        setActiveCategory(orderCategories.indexOf(nearCategoryIndex));
+      }
+    });
+  }
+
+  double getOrdinateCategory(index) {
+    RenderBox renderBox = categoriesList[index]
+        .categoryKey
+        .currentContext!
+        .findAncestorRenderObjectOfType() as RenderBox;
+    Offset offset = renderBox.localToGlobal(Offset.zero);
+    return offset.dy.abs();
   }
 
   void scrollToBeginning(ScrollController scrollController) {
@@ -55,6 +78,7 @@ class _MenuScreenState extends State<MenuScreen> {
   build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        controller: contentScrollController,
         slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
@@ -78,9 +102,9 @@ class _MenuScreenState extends State<MenuScreen> {
                           onTap: () {
                             setActiveCategory(index);
                             scrollToBeginning(appBarScrollController);
-                            showActiveCategory(
-                                categoriesList[orderCategories[activeCategoryIndex]]
-                                    .categoryKey);
+                            showActiveCategory(categoriesList[
+                                    orderCategories[activeCategoryIndex]]
+                                .categoryKey);
                           },
                           categoryName: categoriesList[orderCategories[index]]
                               .categoryName,
@@ -103,12 +127,12 @@ class _MenuScreenState extends State<MenuScreen> {
                             .toList();
                     return [
                       SliverToBoxAdapter(
-                        key: category.categoryKey,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 10),
                           child: Text(
                             category.categoryName,
+                            key: category.categoryKey,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),
