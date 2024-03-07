@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_categories.dart';
-import 'package:siberian_coffee/src/features/menu/view/widgets/product_card.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_products.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/product_card.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/category_button.dart';
+import 'package:siberian_coffee/src/theme/app_colors.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -12,9 +14,20 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  List<int> orderCategories =
+      List.generate(categoriesList.length, (index) => index);
+  int activeCategoryIndex = 0;
+
   @override
   void initState() {
     super.initState();
+  }
+
+  void setActiveCategory(int index) {
+    setState(() {
+      int newActiveCategory = orderCategories.removeAt(index);
+      orderCategories.insert(0, newActiveCategory);
+    });
   }
 
   @override
@@ -22,12 +35,31 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-              const SliverAppBar(
+              SliverAppBar(
                 pinned: true,
-                expandedHeight: 36,
-                backgroundColor: Colors.black45,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("App Bar"),
+                expandedHeight: 20,
+                backgroundColor: AppColors.dimWhite,
+                flexibleSpace: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 40),
+                  child: SizedBox(
+                    height: 36,
+                    child: ListView.separated(
+                      separatorBuilder: ((_, __) {
+                        return const Padding(
+                          padding: EdgeInsets.only(left: 10),
+                        );
+                      }),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: orderCategories.length,
+                      itemBuilder: ((context, index) {
+                        return CategoryButton(
+                          onTap: () => setActiveCategory(index),
+                          categoryName: categoriesList[orderCategories[index]].categoryName,
+                          active: index == activeCategoryIndex,
+                        );
+                      }),
+                    ),
+                  ),
                 ),
               ),
             ] +
@@ -54,7 +86,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       SliverGrid(
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 250.0,
+                          maxCrossAxisExtent: 200.0,
                           mainAxisExtent: 250,
                           mainAxisSpacing: 10.0,
                           crossAxisSpacing: 10.0,
@@ -62,7 +94,6 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            print("$index ${category.categoryName}");
                             return ProductCard(
                                 product: categoryProductList[index]);
                           },

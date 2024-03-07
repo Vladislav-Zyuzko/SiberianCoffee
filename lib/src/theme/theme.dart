@@ -7,6 +7,7 @@ final lightTheme = ThemeData(
   textTheme: const TextTheme(
     titleLarge: AppFonts.titleLarge,
     titleMedium: AppFonts.titleMedium,
+    titleSmall: AppFonts.titleSmall,
     bodySmall: AppFonts.bodySmall,
   ),
 );

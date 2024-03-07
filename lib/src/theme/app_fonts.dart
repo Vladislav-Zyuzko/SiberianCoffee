@@ -13,6 +13,12 @@ sealed class AppFonts {
     letterSpacing: 0.15,
     color: AppColors.primaryBlack,
   );
+  static const titleSmall = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+    color: AppColors.primaryBlack,
+  );
   static const bodySmall = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,
