@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
-import 'package:siberian_coffee/src/features/menu/models/category.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_categories.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_products.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/product_card.dart';
@@ -99,7 +98,6 @@ class _MenuScreenState extends State<MenuScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: categoriesList.length,
                     itemBuilder: ((context, index) {
-                      print(orderCategories);
                       return CategoryButton(
                         onTap: () {
                           setActiveCategory(index);
