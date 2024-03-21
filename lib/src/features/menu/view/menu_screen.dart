@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
+import 'package:siberian_coffee/src/features/menu/models/category.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_categories.dart';
 import 'package:siberian_coffee/src/features/menu/data/local_products.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/product_card.dart';
@@ -14,9 +15,11 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  int activeCategoryIndex = 0;
+  List<GlobalKey> categoriesKeys =
+      List.generate(categoriesList.length, (index) => GlobalKey());
   List<int> orderCategories =
       List.generate(categoriesList.length, (index) => index);
-  int activeCategoryIndex = 0;
 
   ScrollController appBarScrollController = ScrollController();
   ScrollController contentScrollController = ScrollController();
@@ -39,8 +42,7 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   double getOrdinateCategory(index) {
-    RenderBox renderBox = categoriesList[index]
-        .categoryKey
+    RenderBox renderBox = categoriesKeys[orderCategories[index]]
         .currentContext!
         .findAncestorRenderObjectOfType() as RenderBox;
     Offset offset = renderBox.localToGlobal(Offset.zero);
@@ -77,88 +79,80 @@ class _MenuScreenState extends State<MenuScreen> {
   build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        controller: contentScrollController,
-        slivers: <Widget>[
-              SliverAppBar(
-                pinned: true,
-                expandedHeight: 20,
-                backgroundColor: AppColors.dimWhite,
-                flexibleSpace: Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 40),
-                  child: SizedBox(
-                    height: 36,
-                    child: ListView.separated(
-                      separatorBuilder: ((_, __) {
-                        return const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                        );
-                      }),
-                      controller: appBarScrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: orderCategories.length,
-                      itemBuilder: ((context, index) {
-                        return CategoryButton(
-                          onTap: () {
-                            setActiveCategory(index);
-                            scrollToBeginning(appBarScrollController);
-                            showActiveCategory(categoriesList[
-                                    orderCategories[activeCategoryIndex]]
-                                .categoryKey);
-                          },
-                          categoryName: categoriesList[orderCategories[index]]
-                              .categoryName,
-                          active: index == activeCategoryIndex,
-                        );
-                      }),
-                    ),
+          controller: contentScrollController,
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 20,
+              backgroundColor: AppColors.dimWhite,
+              flexibleSpace: Padding(
+                padding: const EdgeInsets.only(left: 10, top: 40),
+                child: SizedBox(
+                  height: 36,
+                  child: ListView.separated(
+                    separatorBuilder: ((_, __) {
+                      return const Padding(
+                        padding: EdgeInsets.only(left: 10),
+                      );
+                    }),
+                    controller: appBarScrollController,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categoriesList.length,
+                    itemBuilder: ((context, index) {
+                      print(orderCategories);
+                      return CategoryButton(
+                        onTap: () {
+                          setActiveCategory(index);
+                          scrollToBeginning(appBarScrollController);
+                          showActiveCategory(
+                              categoriesKeys[index]);
+                        },
+                        categoryName:
+                            categoriesList[orderCategories[index]].categoryName,
+                        active: index == activeCategoryIndex,
+                      );
+                    }),
                   ),
                 ),
               ),
-            ] +
-            categoriesList // Добавляем к первому списку динамический список сливеров
-                .map(
-                  (category) {
-                    List<Product> categoryProductList =
-                        productList // Фильтруем лист по виду продукта
-                            .where((product) =>
-                                product.productCategory ==
-                                category.productCategory)
-                            .toList();
-                    return [
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 10),
-                          child: Text(
-                            category.categoryName,
-                            key: category.categoryKey,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ),
-                      ),
-                      SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200.0,
-                          mainAxisExtent: 250,
-                          mainAxisSpacing: 10.0,
-                          crossAxisSpacing: 10.0,
-                          childAspectRatio: 1.0,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            return ProductCard(
-                                product: categoryProductList[index]);
-                          },
-                          childCount: categoryProductList.length,
-                        ),
-                      ),
-                    ];
-                  },
-                )
-                .expand((element) => element)
-                .toList(),
-      ),
+            ),
+            ...List.generate(categoriesList.length, (index) {
+              List<Product> categoryProductList =
+                  productList // Фильтруем лист по виду продукта
+                      .where((product) =>
+                          product.productCategory ==
+                          categoriesList[index].productCategory)
+                      .toList();
+              return [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
+                    child: Text(
+                      categoriesList[index].categoryName,
+                      key: categoriesKeys[orderCategories[index]],
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                ),
+                SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200.0,
+                    mainAxisExtent: 250,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                    childAspectRatio: 1.0,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return ProductCard(product: categoryProductList[index]);
+                    },
+                    childCount: categoryProductList.length,
+                  ),
+                ),
+              ];
+            }).expand((element) => element),
+          ]),
     );
   }
 }
