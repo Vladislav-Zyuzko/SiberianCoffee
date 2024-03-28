@@ -1,4 +1,3 @@
-import 'package:siberian_coffee/src/features/menu/data/enums/product_categories.dart';
 import 'package:siberian_coffee/src/features/menu/interfaces/classifiable.dart';
 
 class Product extends Classifiable{
@@ -7,9 +6,9 @@ class Product extends Classifiable{
   final double productCost;
 
   Product({
-    required ProductCategory productCategory,
+    required int categoryId,
     required this.imagePath,
     required this.productName,
     required this.productCost,
-  }) : super(productCategory: productCategory);
+  }) : super(categoryId: categoryId);
 }

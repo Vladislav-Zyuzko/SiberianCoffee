@@ -1,7 +1,5 @@
-import 'package:siberian_coffee/src/features/menu/data/enums/product_categories.dart';
-
 abstract class Classifiable {
-  ProductCategory productCategory;
+  int categoryId;
 
-  Classifiable({required this.productCategory});
+  Classifiable({required this.categoryId});
 }

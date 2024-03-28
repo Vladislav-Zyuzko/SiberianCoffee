@@ -8,3 +8,5 @@ class CategoriesSetActiveCategoryEvent extends CategoriesEvent {
 
   CategoriesSetActiveCategoryEvent({required this.activeIndex});
 }
+
+class CategoriesLoadCategoriesEvent extends CategoriesEvent {}

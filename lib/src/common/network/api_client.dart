@@ -16,8 +16,11 @@ class ApiClient {
     dio = restClient.dio;
   }
 
-  Future<Response> getCategories() async {
-    Response response = await dio.get("/products/categories");
+  Future<Response> getCategories(int page, int limit) async {
+    Response response = await dio.get(
+      "/products/categories",
+      queryParameters: {'page': page, 'limit': limit}
+    );
     return response;
   }
 

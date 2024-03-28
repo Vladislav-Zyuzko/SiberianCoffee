@@ -18,16 +18,18 @@ class MenuScrollBloc extends Bloc<MenuScrollEvent, MenuScrollState> {
       MenuScrollAddContentListenerEvent event, Emitter emit) {
     state.contentScrollController.addListener(
       () {
+        CategoriesLoadedState categoriesLoadedState =
+            categoriesBloc.state as CategoriesLoadedState;
         List<double> categoriesOrdinatesList = List.generate(
-            categoriesBloc.state.orderCategories.length,
+            categoriesLoadedState.orderCategories.length,
             (index) => getOrdinateCategory(index, categoriesBloc.state));
         int nearCategoryIndex = categoriesOrdinatesList.indexOf(
           categoriesOrdinatesList
               .reduce((curr, next) => curr < next ? curr : next),
         );
-        if (nearCategoryIndex != categoriesBloc.state.orderCategories[0]) {
+        if (nearCategoryIndex != categoriesLoadedState.orderCategories[0]) {
           categoriesBloc.add(CategoriesSetActiveCategoryEvent(
-              activeIndex: categoriesBloc.state.orderCategories
+              activeIndex: categoriesLoadedState.orderCategories
                   .indexOf(nearCategoryIndex)));
         }
       },
@@ -51,7 +53,8 @@ class MenuScrollBloc extends Bloc<MenuScrollEvent, MenuScrollState> {
     return offset.dy.abs();
   }
 
-  void _showActiveCategory(MenuScrollShowActiveCategoryEvent event, Emitter emit) {
+  void _showActiveCategory(
+      MenuScrollShowActiveCategoryEvent event, Emitter emit) {
     final targetContext = event.categoryKey.currentContext;
     if (targetContext != null) {
       Scrollable.ensureVisible(

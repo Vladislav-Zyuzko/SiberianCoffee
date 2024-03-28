@@ -1,21 +1,20 @@
-import 'package:siberian_coffee/src/features/menu/data/enums/product_categories.dart';
 import 'package:siberian_coffee/src/features/menu/models/category.dart';
 
 List<Category> categoriesList = [
   Category(
-    productCategory: ProductCategory.blackCoffee,
+    categoryId: 0,
+    categoryName: "Авторские напитки",
+  ),
+  Category(
+    categoryId: 1,
     categoryName: "Черный кофе",
   ),
   Category(
-    productCategory: ProductCategory.cofeeWithMilk,
+    categoryId: 2,
     categoryName: "Кофе с молоком",
   ),
   Category(
-    productCategory: ProductCategory.teaDrink,
+    categoryId: 3,
     categoryName: "Чай",
-  ),
-  Category(
-    productCategory: ProductCategory.authorDrink,
-    categoryName: "Авторские напитки",
   ),
 ];
