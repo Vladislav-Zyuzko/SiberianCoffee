@@ -14,7 +14,7 @@ class CategoryRepository implements ICategoryRepository {
   @override
   Future<List<Category>> loadCategories() async {
     try {
-      final Response response = await _apiClient.getCategories(0, 25);
+      final Response response = await _apiClient.getCategories();
       List<dynamic> categoriesData =
           json.decode(json.encode(response.data))['data'];
       List<Category> categories = <Category>[];

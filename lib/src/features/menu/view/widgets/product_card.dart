@@ -28,7 +28,7 @@ class ProductCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.asset(
+          Image.network(
             product.imagePath,
             height: 100,
           ),

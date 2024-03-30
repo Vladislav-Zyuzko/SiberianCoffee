@@ -46,8 +46,7 @@ class MenuScrollBloc extends Bloc<MenuScrollEvent, MenuScrollState> {
   }
 
   double getOrdinateCategory(index, state) {
-    RenderBox renderBox = state
-        .categoriesKeys[state.orderCategories[index]].currentContext!
+    RenderBox renderBox = state.categoriesKeys[index].currentContext!
         .findAncestorRenderObjectOfType() as RenderBox;
     Offset offset = renderBox.localToGlobal(Offset.zero);
     return offset.dy.abs();
@@ -55,11 +54,11 @@ class MenuScrollBloc extends Bloc<MenuScrollEvent, MenuScrollState> {
 
   void _showActiveCategory(
       MenuScrollShowActiveCategoryEvent event, Emitter emit) {
-    final targetContext = event.categoryKey.currentContext;
-    if (targetContext != null) {
+    final context = event.categoryKey.currentContext;
+    if (context != null) {
       Scrollable.ensureVisible(
-        targetContext,
-        duration: const Duration(milliseconds: 800),
+        context,
+        duration: const Duration(milliseconds: 1500),
         curve: Curves.easeInOut,
       );
     }

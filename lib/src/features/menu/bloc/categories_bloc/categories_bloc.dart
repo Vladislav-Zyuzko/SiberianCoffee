@@ -16,25 +16,28 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   void _setActiveCategory(
       CategoriesSetActiveCategoryEvent event, Emitter<CategoriesState> emit) {
     if (state is CategoriesLoadedState) {
-      CategoriesLoadedState categoriesLoadedState = state as CategoriesLoadedState;
-          List<int> newOrderCategories = [...categoriesLoadedState.orderCategories];
-    int newActiveCategory = newOrderCategories.removeAt(event.activeIndex);
-    newOrderCategories.insert(0, newActiveCategory);
-    emit(
-      categoriesLoadedState.copyWith(orderCategories: newOrderCategories),
-    );
+      CategoriesLoadedState categoriesLoadedState =
+          state as CategoriesLoadedState;
+      List<int> newOrderCategories = [...categoriesLoadedState.orderCategories];
+      int newActiveCategory = newOrderCategories.removeAt(event.activeIndex);
+      newOrderCategories.insert(0, newActiveCategory);
+      emit(
+        categoriesLoadedState.copyWith(orderCategories: newOrderCategories),
+      );
     }
   }
 
-  void _loadCategories(CategoriesLoadCategoriesEvent event, Emitter emit) async {
+  void _loadCategories(
+      CategoriesLoadCategoriesEvent event, Emitter emit) async {
     emit(CategoriesLoadingState());
     List<Category> categoriesList = await _categoryRepository.loadCategories();
     emit(
       CategoriesLoadedState(
-          categoriesKeys: List.generate(categoriesList.length, (index) => GlobalKey()),
-          orderCategories: List.generate(categoriesList.length, (index) => index),
-          categoriesList: categoriesList,
-        ),
+        categoriesKeys:
+            List.generate(categoriesList.length, (index) => GlobalKey()),
+        orderCategories: List.generate(categoriesList.length, (index) => index),
+        categoriesList: categoriesList,
+      ),
     );
   }
 }

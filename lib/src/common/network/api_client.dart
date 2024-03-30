@@ -16,18 +16,17 @@ class ApiClient {
     dio = restClient.dio;
   }
 
-  Future<Response> getCategories(int page, int limit) async {
+  Future<Response> getCategories() async {
     Response response = await dio.get(
       "/products/categories",
-      queryParameters: {'page': page, 'limit': limit}
     );
     return response;
   }
 
-  Future<Response> getProductsByCategory(int limit, int idCategory) async {
+  Future<Response> getProductsByCategory(int page, int limit, int idCategory) async {
     Response response = await dio.get(
       "/products/",
-      queryParameters: {'category': idCategory, 'limit': limit},
+      queryParameters: {'page': page,'category': idCategory, 'limit': limit},
     );
     return response;
   }
