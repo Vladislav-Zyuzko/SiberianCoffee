@@ -16,12 +16,13 @@ class _ProductCardImageState extends State<ProductCardImage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _shimmerController;
   Gradient get gradient => LinearGradient(
-    colors: widget.linearGradient.colors,
-    stops: widget.linearGradient.stops,
-    begin: widget.linearGradient.begin,
-    end: widget.linearGradient.end,
-    transform: _SlidingGradientTransform(slidePercent: _shimmerController.value),
-  );
+        colors: widget.linearGradient.colors,
+        stops: widget.linearGradient.stops,
+        begin: widget.linearGradient.begin,
+        end: widget.linearGradient.end,
+        transform:
+            _SlidingGradientTransform(slidePercent: _shimmerController.value),
+      );
 
   @override
   void initState() {
@@ -46,23 +47,34 @@ class _ProductCardImageState extends State<ProductCardImage>
         if (loadingProgress == null) {
           return child;
         } else {
-          return ShaderMask(
-            blendMode: BlendMode.srcATop,
-            shaderCallback: (bounds) {
-              return gradient.createShader(bounds);
-            },
-            child: const DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
-                color: AppColors.primaryBlack,
-              ),
-              child: SizedBox(
-                height: 100,
-                width: double.infinity,
-              ),
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
+              gradient: gradient,
+            ),
+            child: const SizedBox(
+              height: 100,
+              width: double.infinity,
             ),
           );
         }
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return const DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+            color: AppColors.primaryPlatinum,
+          ),
+          child: SizedBox(
+            height: 100,
+            width: double.infinity,
+            child: Icon(
+              Icons.coffee_rounded,
+              size: 30,
+              color: Colors.grey,
+            ),
+          ),
+        );
       },
     );
   }
