@@ -71,7 +71,7 @@ class _ProductCardImageState extends State<ProductCardImage>
             child: Icon(
               Icons.coffee_rounded,
               size: 30,
-              color: Colors.grey,
+              color: AppColors.priamaryGrey,
             ),
           ),
         );
