@@ -162,10 +162,11 @@ class MenuScreen extends StatelessWidget {
                           return AnimatedPositioned(
                             top: MediaQuery.of(context).size.height * 0.9,
                             right: orderActive ? 20 : -99,
-                            duration: const Duration(seconds: 1),
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.bounceOut,
                             child: OrderDetailsButton(
                               onPressed: () => {},
-                              orderAmount: orderActive ? (state as OrderActiveState).amountOrder : 0,
+                              orderAmount: orderActive ? state.amountOrder : 0,
                             ),
                           );
                         },

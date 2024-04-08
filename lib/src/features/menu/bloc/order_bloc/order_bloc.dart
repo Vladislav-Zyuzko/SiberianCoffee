@@ -13,24 +13,39 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   _addProduct(OrderAddProductEvent event, Emitter emit) {
     double amountOrder = 0;
+    List<Product> orderList = [];
     if (state is OrderActiveState) {
       amountOrder = (state as OrderActiveState).amountOrder;
+      orderList = (state as OrderActiveState).orderList;
     }
+    orderList.add(event.product);
     emit(
       OrderActiveState(
-          orderList: [], amountOrder: amountOrder + event.product.productCost),
+          orderList: orderList,
+          amountOrder: amountOrder + event.product.productCost),
     );
   }
 
   _removeProduct(OrderRemoveProductEvent event, Emitter emit) {
-    double amountOrder = 0;
     if (state is OrderActiveState) {
-      amountOrder = (state as OrderActiveState).amountOrder;
-      emit(
+      double amountOrder = (state as OrderActiveState).amountOrder;
+      List<Product> orderList = (state as OrderActiveState).orderList;
+      int lastEventProductIndex = -1;
+      for (int i = 0; i < orderList.length; i++) {
+        if (orderList[i] == event.product) {
+          lastEventProductIndex = i;
+        }
+      }
+      lastEventProductIndex != -1
+          ? orderList.removeAt(lastEventProductIndex)
+          : null;
+      orderList.isNotEmpty
+      ? emit(
         OrderActiveState(
-            orderList: [],
+            orderList: orderList,
             amountOrder: amountOrder - event.product.productCost),
-      );
+      )
+      : emit(OrderEmptyState());
     }
   }
 }
