@@ -5,6 +5,7 @@ import 'package:siberian_coffee/src/features/menu/bloc/menu_scroll_bloc/bloc/men
 import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/products_bloc/bloc/products_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/order_bottom_sheet.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/order_details_button.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/product_card.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/category_button.dart';
@@ -165,12 +166,24 @@ class MenuScreen extends StatelessWidget {
                             duration: const Duration(milliseconds: 800),
                             curve: Curves.bounceOut,
                             child: OrderDetailsButton(
-                              onPressed: () => {},
+                              onPressed: orderActive
+                                  ? () => {
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: ((BuildContext context) {
+                                            return OrderBottomSheet(
+                                              orderState: state,
+                                            );
+                                          }),
+                                        )
+                                      }
+                                  : () => {},
                               orderAmount: orderActive ? state.amountOrder : 0,
                             ),
                           );
                         },
-                      )
+                      ),
                     ],
                   )
                 : const Center(

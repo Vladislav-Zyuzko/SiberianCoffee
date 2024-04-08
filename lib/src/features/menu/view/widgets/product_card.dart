@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:siberian_coffee/src/features/menu/view/widgets/product_card_image.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/product_image.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/purchase_controll_panel.dart';
@@ -29,8 +29,9 @@ class ProductCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ProductCardImage(
+          ProductImage(
             imagePath: product.imagePath,
+            imageHeight: 100,
             linearGradient: AppColors.shimmerGradient,
           ),
           Text(

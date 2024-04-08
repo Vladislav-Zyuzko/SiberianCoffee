@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 
-class ProductCardImage extends StatefulWidget {
+class ProductImage extends StatefulWidget {
   final String imagePath;
+  final double imageHeight;
   final LinearGradient linearGradient;
 
-  const ProductCardImage(
-      {super.key, required this.imagePath, required this.linearGradient});
+  const ProductImage(
+      {super.key,
+      required this.imagePath,
+      required this.imageHeight,
+      required this.linearGradient
+  });
 
   @override
   State createState() => _ProductCardImageState();
 }
 
-class _ProductCardImageState extends State<ProductCardImage>
+class _ProductCardImageState extends State<ProductImage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _shimmerController;
   Gradient get gradient => LinearGradient(
@@ -42,29 +47,29 @@ class _ProductCardImageState extends State<ProductCardImage>
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: widget.imagePath,
-      height: 100,
+      height: widget.imageHeight,
       placeholder: (BuildContext context, String url) {
-          return DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(16)),
-              gradient: gradient,
-            ),
-            child: const SizedBox(
-              height: 100,
-              width: double.infinity,
-            ),
-          );
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            gradient: gradient,
+          ),
+          child: const SizedBox(
+            height: 100,
+            width: double.infinity,
+          ),
+        );
       },
       errorWidget: (context, url, error) {
-        return const DecoratedBox(
-          decoration: BoxDecoration(
+        return DecoratedBox(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(16)),
             color: AppColors.primaryPlatinum,
           ),
           child: SizedBox(
-            height: 100,
+            height: widget.imageHeight,
             width: double.infinity,
-            child: Icon(
+            child: const Icon(
               Icons.coffee_rounded,
               size: 30,
               color: AppColors.priamaryGrey,

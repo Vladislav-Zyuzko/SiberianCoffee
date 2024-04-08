@@ -12,7 +12,10 @@ final lightTheme = ThemeData(
     titleLarge: AppFonts.titleLarge,
     titleMedium: AppFonts.titleMedium,
     titleSmall: AppFonts.titleSmall,
+    bodyLarge: AppFonts.bodyLarge,
+    bodyMedium: AppFonts.bodyMedium,
     bodySmall: AppFonts.bodySmall,
-    labelMedium: AppFonts.labelMedium
+    labelLarge: AppFonts.labelLarge,
+    labelMedium: AppFonts.labelMedium,
   ),
 );

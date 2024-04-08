@@ -4,6 +4,8 @@ sealed class AppColors {
   static const primaryWhite = Colors.white;
   static const dimWhite = Color(0xFFF7FAF8);
   static const primaryPlatinum = Color(0xFFE5E4E2);
+  static const lightGreyD9 = Color(0xFFD9D9D9);
+  static const lightGreyE5 = Color(0xFFE5E5E5);
   static const priamaryGrey = Colors.grey;
   static const primaryBlue = Color(0xFF85C3DE);
   static const middleBlue = Color(0xFF034569);
