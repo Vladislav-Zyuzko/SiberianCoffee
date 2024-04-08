@@ -20,7 +20,7 @@ class CategoryButton extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
-        highlightColor: AppColors.darkBlue,
+        highlightColor: AppColors.middleBlue,
         child: FittedBox(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),

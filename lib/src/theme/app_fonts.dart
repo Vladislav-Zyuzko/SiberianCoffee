@@ -25,4 +25,10 @@ sealed class AppFonts {
     letterSpacing: 0.4,
     color: AppColors.primaryWhite,
   );
+  static const labelMedium = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.4,
+    color: AppColors.primaryWhite,
+  );
 }

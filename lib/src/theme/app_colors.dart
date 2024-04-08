@@ -6,7 +6,9 @@ sealed class AppColors {
   static const primaryPlatinum = Color(0xFFE5E4E2);
   static const priamaryGrey = Colors.grey;
   static const primaryBlue = Color(0xFF85C3DE);
-  static const darkBlue = Color(0xFF034569);
+  static const middleBlue = Color(0xFF034569);
+  static const darkBlue = Color.fromRGBO(0, 28, 56, 0.16);
+  static const dimDarkBlue = Color.fromRGBO(0, 28, 56, 0.08);
   static const dimBlack = Color(0x55000000);
   static const primaryBlack = Colors.black;
 

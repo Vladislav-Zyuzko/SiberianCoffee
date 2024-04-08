@@ -51,7 +51,7 @@ class PurchaseControllBuyButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
-        highlightColor: AppColors.darkBlue,
+        highlightColor: AppColors.middleBlue,
         borderRadius: BorderRadius.circular(16),
         child: SizedBox(
           height: 24,
@@ -122,7 +122,7 @@ class PurchaseControllButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       color: AppColors.primaryBlue,
       child: InkWell(
-        highlightColor: AppColors.darkBlue,
+        highlightColor: AppColors.middleBlue,
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: SizedBox(
