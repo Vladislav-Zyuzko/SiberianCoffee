@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 
 class ProductCardImage extends StatefulWidget {
@@ -39,14 +40,10 @@ class _ProductCardImageState extends State<ProductCardImage>
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      widget.imagePath,
+    return CachedNetworkImage(
+      imageUrl: widget.imagePath,
       height: 100,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        } else {
+      placeholder: (BuildContext context, String url) {
           return DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -57,9 +54,8 @@ class _ProductCardImageState extends State<ProductCardImage>
               width: double.infinity,
             ),
           );
-        }
       },
-      errorBuilder: (context, error, stackTrace) {
+      errorWidget: (context, url, error) {
         return const DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(16)),
