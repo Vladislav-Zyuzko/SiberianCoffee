@@ -40,7 +40,7 @@ class ProductCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           ),
-          PurchaseControllPanel(productCost: product.productCost)
+          PurchaseControllPanel(product: product)
         ],
       ),
     );

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/product_counter_bloc/product_counter_bloc.dart';
+import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PurchaseControllPanel extends StatelessWidget {
-  final double productCost;
+  final Product product;
 
-  const PurchaseControllPanel({super.key, required this.productCost});
+  const PurchaseControllPanel({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -16,17 +18,25 @@ class PurchaseControllPanel extends StatelessWidget {
       create: (context) => productCounterBloc,
       child: BlocBuilder<ProductCounterBloc, ProductCounterState>(
         builder: (context, state) {
+          OrderBloc orderBloc = BlocProvider.of<OrderBloc>(context);
           return AnimatedCrossFade(
             duration: const Duration(milliseconds: 250),
             firstChild: PurchaseControllBuyButton(
-                onTap: () => productCounterBloc.add(ProductCounterActivateEvent()),
-                productCost: "${productCost.toInt()}"),
+                onTap: () {
+                  productCounterBloc.add(ProductCounterActivateEvent());
+                  orderBloc.add(OrderAddProductEvent(product: product));
+                },
+                productCost: "${product.productCost.toInt()}"),
             secondChild: PurchaseController(
               currentProductCount: productCounterBloc.state.countProducts,
-              incrementFunction: () =>
-                  productCounterBloc.add(ProductCounterIncEvent()),
-              decrementFunction: () =>
-                  productCounterBloc.add(ProductCounterDecEvent()),
+              incrementFunction: () {
+                productCounterBloc.add(ProductCounterIncEvent());
+                orderBloc.add(OrderAddProductEvent(product: product));
+              },
+              decrementFunction: () {
+                productCounterBloc.add(ProductCounterDecEvent());
+                orderBloc.add(OrderRemoveProductEvent(product: product));
+              },
             ),
             crossFadeState: !state.counterIsActive
                 ? CrossFadeState.showFirst
