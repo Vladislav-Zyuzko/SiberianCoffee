@@ -30,8 +30,7 @@ class PurchaseControllPanel extends StatelessWidget {
             secondChild: PurchaseController(
               currentProductCount: productCounterBloc.state.countProducts,
               incrementFunction: () {
-                productCounterBloc.add(ProductCounterIncEvent());
-                orderBloc.add(OrderAddProductEvent(product: product));
+                productCounterBloc.add(ProductCounterIncEvent(orderBloc: orderBloc, product: product));
               },
               decrementFunction: () {
                 productCounterBloc.add(ProductCounterDecEvent());

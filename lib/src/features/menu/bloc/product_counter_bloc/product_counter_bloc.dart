@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
+import 'package:siberian_coffee/src/features/menu/models/product.dart';
 
 part 'product_counter_event.dart';
 part 'product_counter_state.dart';
@@ -20,8 +22,10 @@ class ProductCounterBloc
   void _onIncrement(
       ProductCounterIncEvent event, Emitter<ProductCounterState> emit) {
     state.countProducts != 10
-        ? emit(state.copyWith(
-            countProducts: state.countProducts + 1))
+        ? {
+          emit(state.copyWith(countProducts: state.countProducts + 1)),
+          event.orderBloc.add(OrderAddProductEvent(product: event.product))
+        }
         : null;
   }
 
