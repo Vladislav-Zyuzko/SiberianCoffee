@@ -7,6 +7,7 @@ sealed class AppColors {
   static const lightGreyD9 = Color(0xFFD9D9D9);
   static const lightGreyE5 = Color(0xFFE5E5E5);
   static const priamaryGrey = Colors.grey;
+  static const darkGrey = Color.fromARGB(255, 203, 198, 198);
   static const primaryBlue = Color(0xFF85C3DE);
   static const middleBlue = Color(0xFF034569);
   static const darkBlue = Color.fromRGBO(0, 28, 56, 0.16);
