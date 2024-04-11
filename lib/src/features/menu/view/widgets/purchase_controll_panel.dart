@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
-import 'package:siberian_coffee/src/features/menu/bloc/product_counter_bloc/product_counter_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,36 +12,28 @@ class PurchaseControllPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productCounterBloc = ProductCounterBloc();
-    return BlocProvider<ProductCounterBloc>(
-      create: (context) => productCounterBloc,
-      child: BlocBuilder<ProductCounterBloc, ProductCounterState>(
-        builder: (context, state) {
-          OrderBloc orderBloc = BlocProvider.of<OrderBloc>(context);
-          return AnimatedCrossFade(
-            duration: const Duration(milliseconds: 250),
-            firstChild: PurchaseControllBuyButton(
-                onTap: () {
-                  productCounterBloc.add(ProductCounterActivateEvent());
-                  orderBloc.add(OrderAddProductEvent(product: product));
-                },
-                productCost: "${product.productCost.toInt()}"),
-            secondChild: PurchaseController(
-              currentProductCount: productCounterBloc.state.countProducts,
-              incrementFunction: () {
-                productCounterBloc.add(ProductCounterIncEvent(orderBloc: orderBloc, product: product));
-              },
-              decrementFunction: () {
-                productCounterBloc.add(ProductCounterDecEvent());
-                orderBloc.add(OrderRemoveProductEvent(product: product));
-              },
-            ),
-            crossFadeState: !state.counterIsActive
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-          );
-        },
-      ),
+    OrderBloc orderBloc = BlocProvider.of<OrderBloc>(context);
+    return BlocBuilder<OrderBloc, OrderState>(
+      builder: (context, state) {
+        int currentProductCount = state is OrderActiveState
+            ? state.orderList.where((product) => product == this.product).length
+            : 0;
+        return AnimatedCrossFade(
+          duration: const Duration(milliseconds: 250),
+          firstChild: PurchaseControllBuyButton(
+              onTap: () =>
+                  orderBloc.add(OrderAddProductEvent(product: product)),
+              productCost: "${product.productCost.toInt()}"),
+          secondChild: PurchaseController(
+            currentProductCount: currentProductCount,
+            incrementFunction: () => orderBloc.add(OrderAddProductEvent(product: product)),
+            decrementFunction: () => orderBloc.add(OrderRemoveProductEvent(product: product)),
+          ),
+          crossFadeState: currentProductCount == 0
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+        );
+      },
     );
   }
 }

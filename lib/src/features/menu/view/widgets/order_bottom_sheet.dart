@@ -7,11 +7,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:siberian_coffee/src/theme/image_sources.dart';
 
 class OrderBottomSheet extends StatelessWidget {
-  final OrderActiveState orderState;
+  final OrderBloc orderBloc;
 
-  const OrderBottomSheet({super.key, required this.orderState});
+  const OrderBottomSheet({super.key, required this.orderBloc});
 
   Widget build(BuildContext context) {
+    OrderActiveState orderState = orderBloc.state as OrderActiveState;
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.92,
       width: MediaQuery.of(context).size.width,
@@ -37,10 +38,16 @@ class OrderBottomSheet extends StatelessWidget {
                   AppLocalizations.of(context)!.yourOrder,
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
-                Image.asset(
-                  ImageSources.iconDelete,
-                  width: 24,
-                  height: 24,
+                IconButton(
+                  onPressed: () {
+                    orderBloc.add(OrderClearEvent());
+                    Navigator.pop(context);
+                  },
+                  icon: Image.asset(
+                    ImageSources.iconDelete,
+                    width: 24,
+                    height: 24,
+                  ),
                 )
               ],
             ),
@@ -48,7 +55,8 @@ class OrderBottomSheet extends StatelessWidget {
           const Padding(padding: EdgeInsets.only(top: 5)),
           const OrderDivider(),
           Padding(
-            padding: const EdgeInsets.only(top: 15, bottom: 10, left: 10, right: 10),
+            padding:
+                const EdgeInsets.only(top: 15, bottom: 10, left: 10, right: 10),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.65,
               child: RawScrollbar(
@@ -72,7 +80,8 @@ class OrderBottomSheet extends StatelessWidget {
                           Row(
                             children: [
                               ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 100),
+                                constraints:
+                                    const BoxConstraints(maxWidth: 100),
                                 child: ProductImage(
                                   imagePath:
                                       orderState.orderList[index].imagePath,

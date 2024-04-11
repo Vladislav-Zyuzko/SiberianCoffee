@@ -173,7 +173,7 @@ class MenuScreen extends StatelessWidget {
                                           context: context,
                                           builder: ((BuildContext context) {
                                             return OrderBottomSheet(
-                                              orderState: state,
+                                              orderBloc: orderBloc,
                                             );
                                           }),
                                         )

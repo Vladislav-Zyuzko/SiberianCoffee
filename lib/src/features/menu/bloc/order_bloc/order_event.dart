@@ -14,3 +14,5 @@ class OrderRemoveProductEvent extends OrderEvent {
 
   OrderRemoveProductEvent({required this.product});
 }
+
+class OrderClearEvent extends OrderEvent {}
