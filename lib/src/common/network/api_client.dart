@@ -23,11 +23,20 @@ class ApiClient {
     return response;
   }
 
-  Future<Response> getProductsByCategory(int page, int limit, int idCategory) async {
+  Future<Response> getProductsByCategory(
+      int page, int limit, int idCategory) async {
     Response response = await dio.get(
       "/products/",
-      queryParameters: {'page': page,'category': idCategory, 'limit': limit},
+      queryParameters: {'page': page, 'category': idCategory, 'limit': limit},
     );
+    return response;
+  }
+
+  Future<Response> sendOrder(Map<String, int> positions, String token) async {
+    Response response = await dio.post("/orders", data: {
+      "positions": positions,
+      "token": token,
+    });
     return response;
   }
 }

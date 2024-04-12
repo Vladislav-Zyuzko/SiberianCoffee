@@ -11,6 +11,7 @@ class OrderBottomSheet extends StatelessWidget {
 
   const OrderBottomSheet({super.key, required this.orderBloc});
 
+  @override
   Widget build(BuildContext context) {
     OrderActiveState orderState = orderBloc.state as OrderActiveState;
     return SizedBox(
@@ -133,7 +134,10 @@ class OrderBottomSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: () => {},
+                  onPressed: () {
+                    orderBloc.add(OrderSendOrderEvent());
+                    Navigator.pop(context);
+                  },
                   child: Text(
                     AppLocalizations.of(context)!.submitOrder,
                     style: Theme.of(context).textTheme.bodyLarge,

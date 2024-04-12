@@ -11,3 +11,6 @@ class OrderActiveState extends OrderState {
 
   OrderActiveState({required this.orderList, required this.amountOrder});
 }
+
+class OrderSendSuccessState extends OrderState {}
+class OrderSendErrorState extends OrderState {}

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:siberian_coffee/src/common/data_source/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 
 part 'order_event.dart';
@@ -10,6 +11,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<OrderAddProductEvent>(_addProduct);
     on<OrderRemoveProductEvent>(_removeProduct);
     on<OrderClearEvent>(_clearOrder);
+    on<OrderSendOrderEvent>(_sendOrder);
   }
 
   _addProduct(OrderAddProductEvent event, Emitter emit) {
@@ -54,5 +56,25 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   _clearOrder(OrderClearEvent event, Emitter<OrderState> emit) {
     emit(OrderEmptyState());
+  }
+
+  _sendOrder(OrderSendOrderEvent event, Emitter<OrderState> emit) async {
+    if (state is OrderActiveState) {
+      OrderRepository orderRepository = OrderRepository();
+      OrderActiveState activeState = state as OrderActiveState;
+      Map<String, int> orderPositions = {};
+      for (Product product in activeState.orderList) {
+        if (orderPositions.containsKey(product.productId)) {
+          orderPositions[product.productId] =
+              orderPositions[product.productId]! + 1;
+        } else {
+          orderPositions[product.productId] = 1;
+        }
+      }
+      bool sendingSuccess = await orderRepository.sendOrder(orderPositions);
+      sendingSuccess
+          ? emit(OrderSendSuccessState())
+          : emit(OrderSendErrorState());
+    }
   }
 }
