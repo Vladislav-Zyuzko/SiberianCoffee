@@ -57,7 +57,7 @@ class OrderDetailsButton extends StatelessWidget {
               const Padding(padding: EdgeInsets.only(right: 12),),
               Text(
                 "${orderAmount.toInt()}₽",
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelSmall,
               )
             ],
           ),

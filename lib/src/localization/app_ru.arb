@@ -6,5 +6,7 @@
     "categoryAuthorDrinks": "Авторские напитки",
     "shortRub": "руб",
     "yourOrder": "Ваш заказ",
-    "submitOrder": "Оформить заказ"
+    "submitOrder": "Оформить заказ",
+    "orderCreated": "Заказ создан",
+    "orderWithError": "Возникла ошибка при заказе"
 }

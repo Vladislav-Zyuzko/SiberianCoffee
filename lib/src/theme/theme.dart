@@ -17,5 +17,6 @@ final lightTheme = ThemeData(
     bodySmall: AppFonts.bodySmall,
     labelLarge: AppFonts.labelLarge,
     labelMedium: AppFonts.labelMedium,
+    labelSmall: AppFonts.labelSmall,
   ),
 );

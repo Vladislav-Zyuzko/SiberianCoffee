@@ -44,6 +44,12 @@ sealed class AppFonts {
     color: AppColors.primaryBlack,
   );
   static const labelMedium = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+    color: AppColors.primaryWhite,
+  );
+  static const labelSmall = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,

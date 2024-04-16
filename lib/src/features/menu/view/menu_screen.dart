@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/categories_bloc/categories_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/menu_scroll_bloc/bloc/menu_scroll_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
@@ -159,6 +160,26 @@ class MenuScreen extends StatelessWidget {
                       ),
                       BlocBuilder<OrderBloc, OrderState>(
                         builder: (context, state) {
+                          if (state is OrderSendSuccessState ||
+                              state is OrderSendErrorState) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                                  backgroundColor: AppColors.darkGrey7D,
+                                  content: Text(
+                                    state is OrderSendSuccessState
+                                        ? AppLocalizations.of(context)!
+                                            .orderCreated
+                                        : AppLocalizations.of(context)!
+                                            .orderWithError,
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ),
+                              );
+                            });
+                          }
                           bool orderActive = state is OrderActiveState;
                           return AnimatedPositioned(
                             top: MediaQuery.of(context).size.height * 0.9,
