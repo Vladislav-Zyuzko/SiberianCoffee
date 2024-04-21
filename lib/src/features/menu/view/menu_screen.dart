@@ -67,28 +67,37 @@ class MenuScreen extends StatelessWidget {
                                                     EdgeInsets.only(left: 10),
                                               );
                                             }),
-                                            controller: menuScrollBloc
-                                                .state.appBarScrollController,
+                                            physics: state.categoriesIsAnimated
+                                                ? const NeverScrollableScrollPhysics()
+                                                : null,
+                                            controller: categoriesBloc
+                                                .appBarScrollController,
                                             scrollDirection: Axis.horizontal,
                                             itemCount:
                                                 state.categoriesList.length,
                                             itemBuilder: ((context, index) {
                                               return CategoryButton(
-                                                onTap: () {
-                                                  menuScrollBloc.add(
-                                                      MenuScrollAppBarToBeginingEvent());
-                                                  menuScrollBloc.add(
-                                                    MenuScrollShowActiveCategoryEvent(
-                                                      categoryKey: state
-                                                              .categoriesKeys[
-                                                          state.orderCategories[
-                                                              index]],
-                                                    ),
-                                                  );
-                                                  categoriesBloc.add(
-                                                      CategoriesSetActiveCategoryEvent(
-                                                          activeIndex: index));
-                                                },
+                                                key: state.categoryButtonsKeys[
+                                                    state.orderCategories[
+                                                        index]],
+                                                onTap:
+                                                    state.categoriesIsAnimated
+                                                        ? () => {}
+                                                        : () {
+                                                            menuScrollBloc.add(
+                                                              MenuScrollShowActiveCategoryEvent(
+                                                                categoryKey: state
+                                                                        .categoriesKeys[
+                                                                    state.orderCategories[
+                                                                        index]],
+                                                              ),
+                                                            );
+                                                            categoriesBloc.add(
+                                                              CategoriesSetActiveCategoryEvent(
+                                                                  activeIndex:
+                                                                      index),
+                                                            );
+                                                          },
                                                 categoryName: state
                                                     .categoriesList[state
                                                         .orderCategories[index]]
@@ -165,7 +174,8 @@ class MenuScreen extends StatelessWidget {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 24),
                                   backgroundColor: AppColors.darkGrey7D,
                                   content: Text(
                                     state is OrderSendSuccessState

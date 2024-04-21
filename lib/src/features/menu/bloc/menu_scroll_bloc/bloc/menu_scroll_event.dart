@@ -10,5 +10,7 @@ class MenuScrollAppBarToBeginingEvent extends MenuScrollEvent {}
 class MenuScrollShowActiveCategoryEvent extends MenuScrollEvent {
   final GlobalKey categoryKey;
 
-  MenuScrollShowActiveCategoryEvent({required this.categoryKey});
+  MenuScrollShowActiveCategoryEvent({
+    required this.categoryKey,
+  });
 }
