@@ -7,7 +7,10 @@ part 'order_event.dart';
 part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  OrderBloc() : super(OrderEmptyState()) {
+  final OrderRepository _orderRepository;
+  OrderBloc({
+    required OrderRepository orderRepository
+  }) : _orderRepository = orderRepository, super(OrderEmptyState()) {
     on<OrderAddProductEvent>(_addProduct);
     on<OrderRemoveProductEvent>(_removeProduct);
     on<OrderClearEvent>(_clearOrder);
@@ -60,7 +63,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   _sendOrder(OrderSendOrderEvent event, Emitter<OrderState> emit) async {
     if (state is OrderActiveState) {
-      OrderRepository orderRepository = OrderRepository();
       OrderActiveState activeState = state as OrderActiveState;
       Map<String, int> orderPositions = {};
       for (Product product in activeState.orderList) {
@@ -71,7 +73,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           orderPositions[product.productId] = 1;
         }
       }
-      bool sendingSuccess = await orderRepository.sendOrder(orderPositions);
+      bool sendingSuccess = await _orderRepository.sendOrder(orderPositions);
       sendingSuccess
           ? emit(OrderSendSuccessState())
           : emit(OrderSendErrorState());

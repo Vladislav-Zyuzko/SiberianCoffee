@@ -8,9 +8,11 @@ part 'categories_event.dart';
 part 'categories_state.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
-  final CategoryRepository _categoryRepository = CategoryRepository();
+  final CategoryRepository _categoryRepository;
   final ScrollController appBarScrollController = ScrollController();
-  CategoriesBloc() : super(CategoriesLoadingState()) {
+  CategoriesBloc({
+    required CategoryRepository categoryRepository,
+  }) : _categoryRepository = categoryRepository, super(CategoriesLoadingState()) {
     on<CategoriesSetActiveCategoryEvent>(_setActiveCategory);
     on<CategoriesLoadCategoriesEvent>(_loadCategories);
   }

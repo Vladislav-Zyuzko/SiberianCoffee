@@ -13,11 +13,15 @@ part 'products_state.dart';
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   CategoriesBloc categoriesBloc;
   late final StreamSubscription _categoriesBlocSubscription;
-  final ProductRepository _productRepository = ProductRepository();
-  ProductsBloc(this.categoriesBloc) : super(ProductsUnloadedState()) {
+  final ProductRepository _productRepository;
+  ProductsBloc({
+    required this.categoriesBloc,
+    required ProductRepository productRepository
+  }) : _productRepository = productRepository, super(ProductsUnloadedState()) {
     on<ProductsLoadProductsEvent>(_loadProducts);
     _categoriesBlocSubscription = categoriesBloc.stream.listen((state) {
-      if (state is CategoriesLoadedState && this.state is ProductsUnloadedState) {
+      if (state is CategoriesLoadedState &&
+          this.state is ProductsUnloadedState) {
         add(ProductsLoadProductsEvent());
       }
     });
@@ -35,6 +39,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         categoriesBloc.state as CategoriesLoadedState;
     List<Product> productList = await _productRepository
         .loadProducts(categoriesLoadedState.categoriesList);
-    emit(ProductsLoadedState(productList: productList, categoriesList: categoriesLoadedState.categoriesList));
+    emit(ProductsLoadedState(
+        productList: productList,
+        categoriesList: categoriesLoadedState.categoriesList));
   }
 }

@@ -13,16 +13,22 @@ import 'package:siberian_coffee/src/features/menu/view/widgets/category_button.d
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 
 class MenuScreen extends StatelessWidget {
-  const MenuScreen({super.key});
+  final Map repositories;
+  const MenuScreen({super.key, required this.repositories});
 
   @override
   build(BuildContext context) {
-    CategoriesBloc categoriesBloc = CategoriesBloc()
-      ..add(CategoriesLoadCategoriesEvent());
-    ProductsBloc productsBloc = ProductsBloc(categoriesBloc);
-    MenuScrollBloc menuScrollBloc = MenuScrollBloc(categoriesBloc)
-      ..add(MenuScrollAddContentListenerEvent());
-    OrderBloc orderBloc = OrderBloc();
+    CategoriesBloc categoriesBloc = CategoriesBloc(
+      categoryRepository: repositories["category"],
+    )..add(CategoriesLoadCategoriesEvent());
+    ProductsBloc productsBloc = ProductsBloc(
+      categoriesBloc: categoriesBloc,
+      productRepository: repositories["product"],
+    );
+    MenuScrollBloc menuScrollBloc = MenuScrollBloc(
+      categoriesBloc,
+    )..add(MenuScrollAddContentListenerEvent());
+    OrderBloc orderBloc = OrderBloc(orderRepository: repositories["order"]);
     return MultiBlocProvider(
       providers: [
         BlocProvider<CategoriesBloc>(
