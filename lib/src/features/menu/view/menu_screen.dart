@@ -61,6 +61,7 @@ class MenuScreen extends StatelessWidget {
                                   builder: (context, state) {
                                     return state is CategoriesLoadedState
                                         ? ListView.separated(
+                                            cacheExtent: double.infinity,
                                             separatorBuilder: ((_, __) {
                                               return const Padding(
                                                 padding:

@@ -10,40 +10,33 @@ class MenuScrollBloc extends Bloc<MenuScrollEvent, MenuScrollState> {
 
   MenuScrollBloc(this.categoriesBloc) : super(MenuScrollInitialState()) {
     on<MenuScrollAddContentListenerEvent>(_addContentListener);
-    // on<MenuScrollAppBarToBeginingEvent>(_scrollAppBarToBegining);
     on<MenuScrollShowActiveCategoryEvent>(_showActiveCategory);
   }
 
   void _addContentListener(
       MenuScrollAddContentListenerEvent event, Emitter emit) {
-    // state.contentScrollController.addListener(
-    //   () {
-    //     CategoriesLoadedState categoriesLoadedState =
-    //         categoriesBloc.state as CategoriesLoadedState;
-    //     List<double> categoriesOrdinatesList = List.generate(
-    //         categoriesLoadedState.orderCategories.length,
-    //         (index) => getOrdinateCategory(index, categoriesBloc.state));
-    //     int nearCategoryIndex = categoriesOrdinatesList.indexOf(
-    //       categoriesOrdinatesList
-    //           .reduce((curr, next) => curr < next ? curr : next),
-    //     );
-    //     if (nearCategoryIndex != categoriesLoadedState.orderCategories[0]) {
-    //       categoriesBloc.add(CategoriesSetActiveCategoryEvent(
-    //           activeIndex: categoriesLoadedState.orderCategories
-    //               .indexOf(nearCategoryIndex)));
-    //     }
-    //   },
-    // );
+    state.contentScrollController.addListener(
+      () {
+        CategoriesLoadedState categoriesLoadedState =
+            categoriesBloc.state as CategoriesLoadedState;
+        List<double> categoriesOrdinatesList = List.generate(
+            categoriesLoadedState.orderCategories.length,
+            (index) => getOrdinateCategory(index, categoriesBloc.state));
+        int nearCategoryIndex = categoriesOrdinatesList.indexOf(
+          categoriesOrdinatesList
+              .reduce((curr, next) => curr < next ? curr : next),
+        );
+        if (nearCategoryIndex != categoriesLoadedState.orderCategories[0]) {
+          categoriesBloc.add(
+            CategoriesSetActiveCategoryEvent(
+              activeIndex: categoriesLoadedState.orderCategories
+                  .indexOf(nearCategoryIndex),
+            ),
+          );
+        }
+      },
+    );
   }
-
-  // void _scrollAppBarToBegining(
-  //     MenuScrollAppBarToBeginingEvent event, Emitter emit) {
-  //   state.appBarScrollController.animateTo(
-  //     0.0,
-  //     duration: const Duration(milliseconds: 500),
-  //     curve: Curves.easeOut,
-  //   );
-  // }
 
   double getOrdinateCategory(index, state) {
     RenderBox renderBox = state.categoriesKeys[index].currentContext!

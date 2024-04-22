@@ -20,41 +20,43 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     if (state is CategoriesLoadedState) {
       CategoriesLoadedState categoriesLoadedState =
           state as CategoriesLoadedState;
-      IndexWrapper indexWrapper = IndexWrapper(activeIndex: event.activeIndex);
-      List<int> sortedOrderCategories =
-          _moveUnrenderedCateogriesToEnd(categoriesLoadedState, indexWrapper);
-      emit(
-        categoriesLoadedState.copyWith(
-          orderCategories: sortedOrderCategories,
-          activeCategoryIndex: indexWrapper.activeIndex,
-          categoriesIsAnimated: true,
-        ),
-      );
-      categoriesLoadedState = state as CategoriesLoadedState;
-      appBarScrollController.animateTo(
-        _getAbscissCategory(categoriesLoadedState.categoryButtonsKeys[
-                sortedOrderCategories[indexWrapper.activeIndex]]) +
-            appBarScrollController.position.extentBefore -
-            10,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOut,
-      );
-      await Future.delayed(const Duration(milliseconds: 1500));
-      sortedOrderCategories =
-          _moveUnrenderedCateogriesToEnd(categoriesLoadedState, indexWrapper);
-      emit(
-        categoriesLoadedState.copyWith(
-          orderCategories: sortedOrderCategories,
-          activeCategoryIndex: indexWrapper.activeIndex,
-          categoriesIsAnimated: false,
-        ),
-      );
+      if (!categoriesLoadedState.categoriesIsAnimated) {
+        IndexWrapper indexWrapper =
+            IndexWrapper(activeIndex: event.activeIndex);
+        List<int> sortedOrderCategories =
+            _moveUnrenderedCateogriesToEnd(categoriesLoadedState, indexWrapper);
+        emit(
+          categoriesLoadedState.copyWith(
+            orderCategories: sortedOrderCategories,
+            activeCategoryIndex: indexWrapper.activeIndex,
+            categoriesIsAnimated: true,
+          ),
+        );
+        categoriesLoadedState = state as CategoriesLoadedState;
+        appBarScrollController.animateTo(
+          _getAbscissCategory(categoriesLoadedState.categoryButtonsKeys[
+                  sortedOrderCategories[indexWrapper.activeIndex]]) +
+              appBarScrollController.position.extentBefore -
+              10,
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeInOut,
+        );
+        await Future.delayed(const Duration(milliseconds: 1500));
+        sortedOrderCategories =
+            _moveUnrenderedCateogriesToEnd(categoriesLoadedState, indexWrapper);
+        emit(
+          categoriesLoadedState.copyWith(
+            orderCategories: sortedOrderCategories,
+            activeCategoryIndex: indexWrapper.activeIndex,
+            categoriesIsAnimated: false,
+          ),
+        );
+      }
     }
   }
 
   List<int> _moveUnrenderedCateogriesToEnd(
-      CategoriesLoadedState categoriesLoadedState,
-      IndexWrapper indexWrapper) {
+      CategoriesLoadedState categoriesLoadedState, IndexWrapper indexWrapper) {
     List<double> categoryPositions = List.generate(
         categoriesLoadedState.categoriesList.length,
         (index) =>
