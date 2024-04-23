@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/common/data_source/category_repository.dart';
 import 'package:siberian_coffee/src/features/menu/models/category.dart';
-import 'package:siberian_coffee/src/features/utils/index_wrapper.dart';
+import 'package:siberian_coffee/src/features/menu/utils/index_wrapper.dart';
 
 part 'categories_event.dart';
 part 'categories_state.dart';
