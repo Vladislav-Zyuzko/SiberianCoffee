@@ -1,25 +1,28 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:siberian_coffee/src/common/network/api_client.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/order_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/models/order.dart';
+import 'package:siberian_coffee/src/features/menu/utils/order_mapper.dart';
 
 abstract class IOrderRepository {
-  Future<bool> sendOrder(Map<String, int> order);
+  Future<bool> sendOrder(Order order);
 }
 
 class OrderRepository implements IOrderRepository {
-  final ApiClient _apiClient;
+  final IOrderDataSource _networkOrderDataSource;
 
-  OrderRepository() : _apiClient = ApiClient();
+  const OrderRepository({
+    required IOrderDataSource networkOrderDataSource,
+  }) : _networkOrderDataSource = networkOrderDataSource;
 
   @override
-  Future<bool> sendOrder(Map<String, int> order) async {
+  Future<bool> sendOrder(Order order) async {
     try {
-      Response response =
-          await _apiClient.sendOrder(order, "<FCM registration token>");
+      Response response =  await _networkOrderDataSource.sendOrder(order.toDto());
       Map orderData = json.decode(json.encode(response.data));
       return orderData["message"] == "success";
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }

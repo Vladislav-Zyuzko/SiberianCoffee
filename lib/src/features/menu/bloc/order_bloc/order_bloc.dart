@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
+import 'package:siberian_coffee/src/features/menu/models/order.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 
 part 'order_event.dart';
@@ -73,7 +74,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           orderPositions[product.productId] = 1;
         }
       }
-      bool sendingSuccess = await _orderRepository.sendOrder(orderPositions);
+      bool sendingSuccess = await _orderRepository.sendOrder(
+        Order(order: orderPositions),
+      );
       sendingSuccess
           ? emit(OrderSendSuccessState())
           : emit(OrderSendErrorState());

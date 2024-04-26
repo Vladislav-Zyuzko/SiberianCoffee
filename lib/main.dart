@@ -8,6 +8,7 @@ import 'package:siberian_coffee/src/common/network/api_client.dart';
 import 'package:siberian_coffee/src/common/network/rest_client.dart';
 import 'package:siberian_coffee/src/features/menu/data/category_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/categories_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/order_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/products_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/product_repository.dart';
@@ -26,7 +27,11 @@ void main() {
             dio: restClient.dio,
           ),
         ),
-        "order": OrderRepository(),
+        "order": OrderRepository(
+          networkOrderDataSource: NetworkOrderDataSource(
+            dio: restClient.dio,
+          )
+        ),
         "product": ProductRepository(
           networkProductDataSource: NetworkProductDataSource(
             dio: restClient.dio,

@@ -13,14 +13,4 @@ class Product extends Classifiable {
     required this.productName,
     required this.productCost,
   });
-
-  factory Product.fromJson(Map<String, dynamic> map) {
-    return Product(
-      productId: map['id'].toString(),
-      categoryId: map['category']['id'],
-      imagePath: map['imageUrl'],
-      productName: map['name'],
-      productCost: double.parse(map['prices'][0]['value']),
-    );
-  }
 }
