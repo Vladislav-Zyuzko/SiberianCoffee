@@ -8,7 +8,7 @@ part 'categories_event.dart';
 part 'categories_state.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
-  final CategoryRepository _categoryRepository;
+  final ICategoryRepository _categoryRepository;
   final ScrollController appBarScrollController = ScrollController();
   CategoriesBloc({
     required CategoryRepository categoryRepository,

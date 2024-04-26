@@ -13,7 +13,7 @@ part 'products_state.dart';
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   CategoriesBloc categoriesBloc;
   late final StreamSubscription _categoriesBlocSubscription;
-  final ProductRepository _productRepository;
+  final IProductRepository _productRepository;
   ProductsBloc(
       {required this.categoriesBloc,
       required ProductRepository productRepository})
