@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:siberian_coffee/src/common/interfaces/i_order_repository.dart';
 import 'package:siberian_coffee/src/common/network/api_client.dart';
+
+abstract class IOrderRepository {
+  Future<bool> sendOrder(Map<String, int> order);
+}
 
 class OrderRepository implements IOrderRepository {
   final ApiClient _apiClient;

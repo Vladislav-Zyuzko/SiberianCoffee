@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:siberian_coffee/src/common/data_source/category_repository.dart';
+import 'package:siberian_coffee/src/features/menu/data/category_repository.dart';
 import 'package:siberian_coffee/src/features/menu/models/category.dart';
 import 'package:siberian_coffee/src/features/menu/utils/index_wrapper.dart';
 
@@ -109,8 +109,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     return 0.0;
   }
 
-  void _loadCategories(
-      CategoriesLoadCategoriesEvent event, Emitter emit) async {
+  void _loadCategories(CategoriesLoadCategoriesEvent event, Emitter emit) async {
     emit(CategoriesLoadingState());
     List<Category> categoriesList = await _categoryRepository.loadCategories();
     emit(

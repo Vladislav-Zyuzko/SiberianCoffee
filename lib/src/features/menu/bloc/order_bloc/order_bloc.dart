@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:siberian_coffee/src/common/data_source/order_repository.dart';
+import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 
 part 'order_event.dart';
