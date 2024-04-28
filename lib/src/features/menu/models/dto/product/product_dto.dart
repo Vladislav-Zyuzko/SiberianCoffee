@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:drift/drift.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/category/category_dto.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/price/price_dto.dart';
 
@@ -22,8 +23,13 @@ class ProductDto {
     required this.prices,
   });
 
-  factory ProductDto.fromJson(Map<String, dynamic> json) => _$ProductDtoFromJson(json);
+  factory ProductDto.fromJson(Map<String, dynamic> json) =>
+      _$ProductDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductDtoToJson(this);
-  
+
+  static JsonTypeConverter<ProductDto, String> converter = TypeConverter.json(
+    fromJson: (json) => ProductDto.fromJson(json as Map<String, Object?>),
+    toJson: (product) => product.toJson(),
+  );
 }

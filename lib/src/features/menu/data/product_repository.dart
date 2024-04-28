@@ -33,26 +33,26 @@ class ProductRepository implements IProductRepository {
 
   @override
   Future<List<Product>> loadProducts(List<Category> categoriesList) async {
-    const int pageLimit = 25;
+    // const int pageLimit = 25;
 
-    List<Product> productList = <Product>[];
+    // List<Product> productList = <Product>[];
 
-    for (Category category in categoriesList) {
-      int currentPage = 0;
-      while (true) {
-        List<Product> categoryProductList = await loadProductsByCategory(
-          categoryId: category.categoryId,
-          page: currentPage,
-          limit: pageLimit,
-        );
-        productList.addAll(categoryProductList);
-        if (categoryProductList.length < pageLimit) {
-          currentPage = 0;
-          break;
-        }
-        currentPage += 1;
-      }
-    }
-    return productList;
+    // for (Category category in categoriesList) {
+    //   int currentPage = 0;
+    //   while (true) {
+    //     List<Product> categoryProductList = await loadProductsByCategory(
+    //       categoryId: category.categoryId,
+    //       page: currentPage,
+    //       limit: pageLimit,
+    //     );
+    //     productList.addAll(categoryProductList);
+    //     if (categoryProductList.length < pageLimit) {
+    //       currentPage = 0;
+    //       break;
+    //     }
+    //     currentPage += 1;
+    //   }
+    // }
+    return [];
   }
 }
