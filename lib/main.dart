@@ -12,7 +12,8 @@ import 'package:siberian_coffee/src/features/menu/data/category_repository.dart'
 import 'package:siberian_coffee/src/features/menu/data/data_sources/categories_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/order_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/products_data_source.dart';
-import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_catogories_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_categories_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_products_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/product_repository.dart';
 
@@ -42,8 +43,11 @@ void main() {
         )),
         "product": ProductRepository(
             networkProductDataSource: NetworkProductDataSource(
-          dio: restClient.dio,
-        )),
+              dio: restClient.dio,
+            ),
+            dbProductDataSource: DbProductsDataSource(
+              scDatabaseApi: scDatabaseApi,
+            )),
       },
     ));
   }, (error, stack) {

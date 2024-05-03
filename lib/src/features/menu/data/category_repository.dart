@@ -1,5 +1,5 @@
 import 'package:siberian_coffee/src/features/menu/data/data_sources/categories_data_source.dart';
-import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_catogories_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_categories_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/models/category.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/category/category_dto.dart';
 import 'package:siberian_coffee/src/features/menu/utils/category_mapper.dart';

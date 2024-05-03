@@ -9,16 +9,18 @@ class $CategoryTableTable extends CategoryTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CategoryTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _categoryDtoMeta =
-      const VerificationMeta('categoryDto');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumnWithTypeConverter<CategoryDto, String> categoryDto =
-      GeneratedColumn<String>('productDto', aliasedName, false,
-              type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<CategoryDto>(
-              $CategoryTableTable.$convertercategoryDto);
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _slugMeta = const VerificationMeta('slug');
   @override
-  List<GeneratedColumn> get $columns => [categoryDto];
+  late final GeneratedColumn<String> slug = GeneratedColumn<String>(
+      'slug', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, slug];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -29,19 +31,28 @@ class $CategoryTableTable extends CategoryTable
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    context.handle(_categoryDtoMeta, const VerificationResult.success());
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('slug')) {
+      context.handle(
+          _slugMeta, slug.isAcceptableOrUnknown(data['slug']!, _slugMeta));
+    } else if (isInserting) {
+      context.missing(_slugMeta);
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   CategoryTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CategoryTableData(
-      categoryDto: $CategoryTableTable.$convertercategoryDto.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}productDto'])!),
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      slug: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}slug'])!,
     );
   }
 
@@ -49,28 +60,25 @@ class $CategoryTableTable extends CategoryTable
   $CategoryTableTable createAlias(String alias) {
     return $CategoryTableTable(attachedDatabase, alias);
   }
-
-  static JsonTypeConverter2<CategoryDto, String, String> $convertercategoryDto =
-      CategoryDto.converter;
 }
 
 class CategoryTableData extends DataClass
     implements Insertable<CategoryTableData> {
-  final CategoryDto categoryDto;
-  const CategoryTableData({required this.categoryDto});
+  final int id;
+  final String slug;
+  const CategoryTableData({required this.id, required this.slug});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    {
-      map['productDto'] = Variable<String>(
-          $CategoryTableTable.$convertercategoryDto.toSql(categoryDto));
-    }
+    map['id'] = Variable<int>(id);
+    map['slug'] = Variable<String>(slug);
     return map;
   }
 
   CategoryTableCompanion toCompanion(bool nullToAbsent) {
     return CategoryTableCompanion(
-      categoryDto: Value(categoryDto),
+      id: Value(id),
+      slug: Value(slug),
     );
   }
 
@@ -78,76 +86,78 @@ class CategoryTableData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CategoryTableData(
-      categoryDto: $CategoryTableTable.$convertercategoryDto
-          .fromJson(serializer.fromJson<String>(json['categoryDto'])),
+      id: serializer.fromJson<int>(json['id']),
+      slug: serializer.fromJson<String>(json['slug']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'categoryDto': serializer.toJson<String>(
-          $CategoryTableTable.$convertercategoryDto.toJson(categoryDto)),
+      'id': serializer.toJson<int>(id),
+      'slug': serializer.toJson<String>(slug),
     };
   }
 
-  CategoryTableData copyWith({CategoryDto? categoryDto}) => CategoryTableData(
-        categoryDto: categoryDto ?? this.categoryDto,
+  CategoryTableData copyWith({int? id, String? slug}) => CategoryTableData(
+        id: id ?? this.id,
+        slug: slug ?? this.slug,
       );
   @override
   String toString() {
     return (StringBuffer('CategoryTableData(')
-          ..write('categoryDto: $categoryDto')
+          ..write('id: $id, ')
+          ..write('slug: $slug')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => categoryDto.hashCode;
+  int get hashCode => Object.hash(id, slug);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CategoryTableData && other.categoryDto == this.categoryDto);
+      (other is CategoryTableData &&
+          other.id == this.id &&
+          other.slug == this.slug);
 }
 
 class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
-  final Value<CategoryDto> categoryDto;
-  final Value<int> rowid;
+  final Value<int> id;
+  final Value<String> slug;
   const CategoryTableCompanion({
-    this.categoryDto = const Value.absent(),
-    this.rowid = const Value.absent(),
+    this.id = const Value.absent(),
+    this.slug = const Value.absent(),
   });
   CategoryTableCompanion.insert({
-    required CategoryDto categoryDto,
-    this.rowid = const Value.absent(),
-  }) : categoryDto = Value(categoryDto);
+    this.id = const Value.absent(),
+    required String slug,
+  }) : slug = Value(slug);
   static Insertable<CategoryTableData> custom({
-    Expression<String>? categoryDto,
-    Expression<int>? rowid,
+    Expression<int>? id,
+    Expression<String>? slug,
   }) {
     return RawValuesInsertable({
-      if (categoryDto != null) 'productDto': categoryDto,
-      if (rowid != null) 'rowid': rowid,
+      if (id != null) 'id': id,
+      if (slug != null) 'slug': slug,
     });
   }
 
-  CategoryTableCompanion copyWith(
-      {Value<CategoryDto>? categoryDto, Value<int>? rowid}) {
+  CategoryTableCompanion copyWith({Value<int>? id, Value<String>? slug}) {
     return CategoryTableCompanion(
-      categoryDto: categoryDto ?? this.categoryDto,
-      rowid: rowid ?? this.rowid,
+      id: id ?? this.id,
+      slug: slug ?? this.slug,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (categoryDto.present) {
-      map['productDto'] = Variable<String>(
-          $CategoryTableTable.$convertercategoryDto.toSql(categoryDto.value));
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
+    if (slug.present) {
+      map['slug'] = Variable<String>(slug.value);
     }
     return map;
   }
@@ -155,8 +165,340 @@ class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
   @override
   String toString() {
     return (StringBuffer('CategoryTableCompanion(')
-          ..write('categoryDto: $categoryDto, ')
-          ..write('rowid: $rowid')
+          ..write('id: $id, ')
+          ..write('slug: $slug')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ProductTableTable extends ProductTable
+    with TableInfo<$ProductTableTable, ProductTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProductTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<int> category = GeneratedColumn<int>(
+      'category', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES category_table (id)'));
+  static const VerificationMeta _imageUrlMeta =
+      const VerificationMeta('imageUrl');
+  @override
+  late final GeneratedColumn<String> imageUrl = GeneratedColumn<String>(
+      'imageUrl', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _pricesMeta = const VerificationMeta('prices');
+  @override
+  late final GeneratedColumnWithTypeConverter<List<PriceDto>, String> prices =
+      GeneratedColumn<String>('prices', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<List<PriceDto>>($ProductTableTable.$converterprices);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, description, category, imageUrl, prices];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'product_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<ProductTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('imageUrl')) {
+      context.handle(_imageUrlMeta,
+          imageUrl.isAcceptableOrUnknown(data['imageUrl']!, _imageUrlMeta));
+    } else if (isInserting) {
+      context.missing(_imageUrlMeta);
+    }
+    context.handle(_pricesMeta, const VerificationResult.success());
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ProductTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProductTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category'])!,
+      imageUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}imageUrl'])!,
+      prices: $ProductTableTable.$converterprices.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}prices'])!),
+    );
+  }
+
+  @override
+  $ProductTableTable createAlias(String alias) {
+    return $ProductTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<List<PriceDto>, String, String> $converterprices =
+      pricesConverter;
+}
+
+class ProductTableData extends DataClass
+    implements Insertable<ProductTableData> {
+  final int id;
+  final String name;
+  final String description;
+  final int category;
+  final String imageUrl;
+  final List<PriceDto> prices;
+  const ProductTableData(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.category,
+      required this.imageUrl,
+      required this.prices});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['description'] = Variable<String>(description);
+    map['category'] = Variable<int>(category);
+    map['imageUrl'] = Variable<String>(imageUrl);
+    {
+      map['prices'] =
+          Variable<String>($ProductTableTable.$converterprices.toSql(prices));
+    }
+    return map;
+  }
+
+  ProductTableCompanion toCompanion(bool nullToAbsent) {
+    return ProductTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      description: Value(description),
+      category: Value(category),
+      imageUrl: Value(imageUrl),
+      prices: Value(prices),
+    );
+  }
+
+  factory ProductTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProductTableData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String>(json['description']),
+      category: serializer.fromJson<int>(json['category']),
+      imageUrl: serializer.fromJson<String>(json['imageUrl']),
+      prices: $ProductTableTable.$converterprices
+          .fromJson(serializer.fromJson<String>(json['prices'])),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String>(description),
+      'category': serializer.toJson<int>(category),
+      'imageUrl': serializer.toJson<String>(imageUrl),
+      'prices': serializer
+          .toJson<String>($ProductTableTable.$converterprices.toJson(prices)),
+    };
+  }
+
+  ProductTableData copyWith(
+          {int? id,
+          String? name,
+          String? description,
+          int? category,
+          String? imageUrl,
+          List<PriceDto>? prices}) =>
+      ProductTableData(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        category: category ?? this.category,
+        imageUrl: imageUrl ?? this.imageUrl,
+        prices: prices ?? this.prices,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ProductTableData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('category: $category, ')
+          ..write('imageUrl: $imageUrl, ')
+          ..write('prices: $prices')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, name, description, category, imageUrl, prices);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProductTableData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.description == this.description &&
+          other.category == this.category &&
+          other.imageUrl == this.imageUrl &&
+          other.prices == this.prices);
+}
+
+class ProductTableCompanion extends UpdateCompanion<ProductTableData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> description;
+  final Value<int> category;
+  final Value<String> imageUrl;
+  final Value<List<PriceDto>> prices;
+  const ProductTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.category = const Value.absent(),
+    this.imageUrl = const Value.absent(),
+    this.prices = const Value.absent(),
+  });
+  ProductTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String description,
+    required int category,
+    required String imageUrl,
+    required List<PriceDto> prices,
+  })  : name = Value(name),
+        description = Value(description),
+        category = Value(category),
+        imageUrl = Value(imageUrl),
+        prices = Value(prices);
+  static Insertable<ProductTableData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? description,
+    Expression<int>? category,
+    Expression<String>? imageUrl,
+    Expression<String>? prices,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (category != null) 'category': category,
+      if (imageUrl != null) 'imageUrl': imageUrl,
+      if (prices != null) 'prices': prices,
+    });
+  }
+
+  ProductTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String>? description,
+      Value<int>? category,
+      Value<String>? imageUrl,
+      Value<List<PriceDto>>? prices}) {
+    return ProductTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      category: category ?? this.category,
+      imageUrl: imageUrl ?? this.imageUrl,
+      prices: prices ?? this.prices,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<int>(category.value);
+    }
+    if (imageUrl.present) {
+      map['imageUrl'] = Variable<String>(imageUrl.value);
+    }
+    if (prices.present) {
+      map['prices'] = Variable<String>(
+          $ProductTableTable.$converterprices.toSql(prices.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProductTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('category: $category, ')
+          ..write('imageUrl: $imageUrl, ')
+          ..write('prices: $prices')
           ..write(')'))
         .toString();
   }
@@ -165,9 +507,11 @@ class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
 abstract class _$SiberianCoffeeDatabase extends GeneratedDatabase {
   _$SiberianCoffeeDatabase(QueryExecutor e) : super(e);
   late final $CategoryTableTable categoryTable = $CategoryTableTable(this);
+  late final $ProductTableTable productTable = $ProductTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [categoryTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [categoryTable, productTable];
 }
