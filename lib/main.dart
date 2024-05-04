@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:siberian_coffee/src/app.dart';
-import 'package:siberian_coffee/src/common/network/api_client.dart';
 import 'package:siberian_coffee/src/common/network/rest_client.dart';
 import 'package:siberian_coffee/src/database/api/sc_database_api.dart';
 import 'package:siberian_coffee/src/database/sc_database.dart';
@@ -23,7 +22,6 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     await dotenv.load(fileName: ".env");
     await restClient.init();
-    await ApiClient.initialize();
 
     SiberianCoffeeDatabase scDatabase = SiberianCoffeeDatabase();
     ScDatabaseApi scDatabaseApi = ScDatabaseApi(scDatabase: scDatabase);
