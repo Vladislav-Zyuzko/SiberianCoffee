@@ -23,7 +23,7 @@ class CategoryRepository implements ICategoryRepository {
     var dtos = <CategoryDto>[];
     try {
       dtos = await _networkCategoriesDataSource.loadCategories();
-      _dbCategoriesDataSource.saveCategories(categories: dtos);
+      await _dbCategoriesDataSource.saveCategories(categories: dtos);
     } catch(_) {
       dtos = await _dbCategoriesDataSource.loadCategories();
     }

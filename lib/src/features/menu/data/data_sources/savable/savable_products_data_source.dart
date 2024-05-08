@@ -20,6 +20,6 @@ class DbProductsDataSource implements ISavableProductsDataSource {
 
   @override
   Future<void> saveProducts({required List<ProductDto> products}) async {
-    await _scDatabaseApi.saveProducts(products: products);
+    _scDatabaseApi.saveProducts(products: products);
   }
 }

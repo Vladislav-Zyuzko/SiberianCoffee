@@ -13,6 +13,7 @@ import 'package:siberian_coffee/src/features/menu/data/data_sources/addresses_da
 import 'package:siberian_coffee/src/features/menu/data/data_sources/categories_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/order_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/products_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_addresses_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_categories_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_products_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
@@ -33,6 +34,9 @@ void main() {
         "address": AddressRepository(
           networkAddressesDataSource: NetworkAddressesDataSource(
             dio: restClient.dio,
+          ),
+          dbAddressesDataSource: DbAddressesDataSource(
+            scDatabaseApi: scDatabaseApi,
           )
         ),
         "category": CategoryRepository(
