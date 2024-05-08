@@ -6,6 +6,7 @@ import 'package:siberian_coffee/src/features/menu/bloc/categories_bloc/categorie
 import 'package:siberian_coffee/src/features/menu/bloc/menu_scroll_bloc/bloc/menu_scroll_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/products_bloc/bloc/products_bloc.dart';
+import 'package:siberian_coffee/src/features/menu/bloc/user_bloc/user_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/order_bottom_sheet.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/order_details_button.dart';
@@ -33,6 +34,9 @@ class MenuScreen extends StatelessWidget {
       categoriesBloc,
     )..add(MenuScrollAddContentListenerEvent());
     OrderBloc orderBloc = OrderBloc(orderRepository: repositories["order"]);
+    UserBloc userBloc = UserBloc(
+      userRepository: repositories["user"],
+    );
     return MultiBlocProvider(
       providers: [
         BlocProvider<AddressesBloc>(
@@ -49,6 +53,9 @@ class MenuScreen extends StatelessWidget {
         ),
         BlocProvider<OrderBloc>(
           create: (context) => orderBloc,
+        ),
+        BlocProvider<UserBloc>(
+          create: (context) => userBloc,
         )
       ],
       child: Scaffold(

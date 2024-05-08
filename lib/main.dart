@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siberian_coffee/src/app.dart';
 import 'package:siberian_coffee/src/common/network/rest_client.dart';
 import 'package:siberian_coffee/src/database/api/sc_database_api.dart';
@@ -16,8 +17,10 @@ import 'package:siberian_coffee/src/features/menu/data/data_sources/products_dat
 import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_addresses_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_categories_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_products_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_user_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/product_repository.dart';
+import 'package:siberian_coffee/src/features/menu/data/user_repository.dart';
 
 void main() {
   RestClient restClient = RestClient();
@@ -26,6 +29,7 @@ void main() {
     await dotenv.load(fileName: ".env");
     await restClient.init();
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     SiberianCoffeeDatabase scDatabase = SiberianCoffeeDatabase();
     ScDatabaseApi scDatabaseApi = ScDatabaseApi(scDatabase: scDatabase);
 
@@ -60,6 +64,11 @@ void main() {
             scDatabaseApi: scDatabaseApi,
           ),
         ),
+        "user": UserRepository(
+          preferencesUserDataSource: PreferencesUserDataSource(
+            prefs: prefs,
+          ),
+        )
       },
     ));
   }, (error, stack) {
