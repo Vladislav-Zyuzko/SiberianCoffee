@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:siberian_coffee/src/features/menu/bloc/addresses_bloc/addresses_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/categories_bloc/categories_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/menu_scroll_bloc/bloc/menu_scroll_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
@@ -18,6 +19,9 @@ class MenuScreen extends StatelessWidget {
 
   @override
   build(BuildContext context) {
+    AddressesBloc addressesBloc = AddressesBloc(
+      addressRepository: repositories["address"],
+    )..add(AddressesLoadAddressesEvent());
     CategoriesBloc categoriesBloc = CategoriesBloc(
       categoryRepository: repositories["category"],
     )..add(CategoriesLoadCategoriesEvent());
@@ -31,6 +35,9 @@ class MenuScreen extends StatelessWidget {
     OrderBloc orderBloc = OrderBloc(orderRepository: repositories["order"]);
     return MultiBlocProvider(
       providers: [
+        BlocProvider<AddressesBloc>(
+          create: (context) => addressesBloc,
+        ),
         BlocProvider<CategoriesBloc>(
           create: (context) => categoriesBloc,
         ),

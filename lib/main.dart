@@ -7,7 +7,9 @@ import 'package:siberian_coffee/src/app.dart';
 import 'package:siberian_coffee/src/common/network/rest_client.dart';
 import 'package:siberian_coffee/src/database/api/sc_database_api.dart';
 import 'package:siberian_coffee/src/database/sc_database.dart';
+import 'package:siberian_coffee/src/features/menu/data/address_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/category_repository.dart';
+import 'package:siberian_coffee/src/features/menu/data/data_sources/addresses_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/categories_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/order_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/products_data_source.dart';
@@ -28,24 +30,32 @@ void main() {
 
     runApp(SiberianCoffeeApp(
       repositories: {
+        "address": AddressRepository(
+          networkAddressesDataSource: NetworkAddressesDataSource(
+            dio: restClient.dio,
+          )
+        ),
         "category": CategoryRepository(
-            networkCategoriesDataSource: NetworkCategoriesDataSource(
-              dio: restClient.dio,
-            ),
-            dbCategoriesDataSource: DbCategoriesDataSource(
-              scDatabaseApi: scDatabaseApi,
-            ),),
+          networkCategoriesDataSource: NetworkCategoriesDataSource(
+            dio: restClient.dio,
+          ),
+          dbCategoriesDataSource: DbCategoriesDataSource(
+            scDatabaseApi: scDatabaseApi,
+          ),
+        ),
         "order": OrderRepository(
-            networkOrderDataSource: NetworkOrderDataSource(
-          dio: restClient.dio,
-        )),
+          networkOrderDataSource: NetworkOrderDataSource(
+            dio: restClient.dio,
+          ),
+        ),
         "product": ProductRepository(
-            networkProductDataSource: NetworkProductDataSource(
-              dio: restClient.dio,
-            ),
-            dbProductDataSource: DbProductsDataSource(
-              scDatabaseApi: scDatabaseApi,
-            )),
+          networkProductDataSource: NetworkProductDataSource(
+            dio: restClient.dio,
+          ),
+          dbProductDataSource: DbProductsDataSource(
+            scDatabaseApi: scDatabaseApi,
+          ),
+        ),
       },
     ));
   }, (error, stack) {
