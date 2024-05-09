@@ -14,6 +14,7 @@ sealed class AppColors {
   static const darkBlue = Color.fromRGBO(0, 28, 56, 0.16);
   static const dimDarkBlue = Color.fromRGBO(0, 28, 56, 0.08);
   static const dimBlack = Color(0x55000000);
+  static const dimBlack25 = Color.fromRGBO(0, 0, 0, 0.25);
   static const primaryBlack = Colors.black;
 
   static const shimmerGradient = LinearGradient(

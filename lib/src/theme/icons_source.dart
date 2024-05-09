@@ -3,6 +3,8 @@ sealed class IconsSource {
 
   static const iconOrder = "${_baseIconsUrl}icon_order.png";
   static const iconDelete = "${_baseIconsUrl}icon_delete.png";
+  static const iconBackArrow = "${_baseIconsUrl}icon_back_arrow.png";
+  static const iconMap = "${_baseIconsUrl}icon_map.png";
   static const iconLocationPin = "${_baseIconsUrl}icon_location_pin.png";
   static const iconLocationPin2 = "${_baseIconsUrl}icon_location_pin2.png";
 }

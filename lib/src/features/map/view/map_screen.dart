@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/map/services/location_service.dart';
+import 'package:siberian_coffee/src/features/map/view/widgets/map_button.dart';
 import 'package:siberian_coffee/src/features/menu/models/address.dart';
 import 'package:siberian_coffee/src/theme/icons_source.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -32,14 +33,36 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return YandexMap(
-      onMapCreated:(controller) => {
-        _mapControllerCompleter.complete(controller),
-      },
-      mapObjects: _getPlacemarkObjects(
-        context,
-        widget.coffeeShopAddresses.map((address) => address.toPoint()).toList()
-      ),
+    return Stack(
+      children: [
+        YandexMap(
+          onMapCreated:(controller) => {
+            _mapControllerCompleter.complete(controller),
+          },
+          mapObjects: _getPlacemarkObjects(
+            context,
+            widget.coffeeShopAddresses.map((address) => address.toPoint()).toList()
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
+          child: Row(
+            children: [
+              MapButton(
+                iconUrl: IconsSource.iconBackArrow, 
+                onTap: () => {
+                  Navigator.pop(context),
+                },
+              ),
+              const Spacer(),
+              MapButton(
+                iconUrl: IconsSource.iconMap, 
+                onTap: () => {},
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -51,10 +74,10 @@ class _MapScreenState extends State<MapScreen> {
     Point startLocation = userLocationIsAvailable
         ? await _loacationService.getCurrentPosition()
         : widget.userCoffeeShopAddress.toPoint();
-    _moveToLocation(startLocation);
+    _moveCameraToLocation(startLocation);
   }
 
-  Future<void> _moveToLocation(Point location) async {
+  Future<void> _moveCameraToLocation(Point location) async {
     (await _mapControllerCompleter.future).moveCamera(
       animation: const MapAnimation(
         type: MapAnimationType.linear,
