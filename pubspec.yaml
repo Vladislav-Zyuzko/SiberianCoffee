@@ -25,6 +25,7 @@ dependencies:
   json_annotation: ^4.9.0
   sqlite3: ^2.4.0
   shared_preferences: ^2.2.3
+  yandex_mapkit: ^4.0.2
 
 dev_dependencies:
   flutter_test:
