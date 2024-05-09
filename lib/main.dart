@@ -21,10 +21,12 @@ import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/sava
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/product_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/user_repository.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 void main() {
   RestClient restClient = RestClient();
   runZonedGuarded(() async {
+    AndroidYandexMap.useAndroidViewSurface = false;
     WidgetsFlutterBinding.ensureInitialized();
     await dotenv.load(fileName: ".env");
     await restClient.init();

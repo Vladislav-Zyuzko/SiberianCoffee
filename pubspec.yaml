@@ -26,6 +26,7 @@ dependencies:
   sqlite3: ^2.4.0
   shared_preferences: ^2.2.3
   yandex_mapkit: ^4.0.2
+  geolocator: ^11.0.0
 
 dev_dependencies:
   flutter_test:

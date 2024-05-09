@@ -81,11 +81,18 @@ class MenuScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               BlocBuilder<UserBloc, UserState>(builder: (context, state) {
-                                return state is UserLoadedState
-                                ? CoffeeShopAddressPanel(
-                                  coffeeShopAddress: state.user.userCoffeeShopAddress?.address ?? "",
-                                )
-                                : const Placeholder();
+                                final addressesState = context.watch<AddressesBloc>().state;
+                                if (addressesState is AddressesLoadedState) {
+                                  return state is UserLoadedState
+                                    ? state.user.userCoffeeShopAddress != null
+                                      ? CoffeeShopAddressPanel(
+                                        userCoffeeShopAddress: state.user.userCoffeeShopAddress!, 
+                                        coffeeShopsAddresses: addressesState.addresses,
+                                      )
+                                      : const Placeholder()
+                                    : const Placeholder();
+                                }
+                                return const Placeholder();
                               }),
                               const Padding(padding: EdgeInsets.only(top: 10)),
                               SizedBox(
