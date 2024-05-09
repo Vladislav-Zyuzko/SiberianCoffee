@@ -4,7 +4,7 @@ import 'package:siberian_coffee/src/features/menu/view/widgets/order_divider.dar
 import 'package:siberian_coffee/src/features/menu/view/widgets/product_image.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:siberian_coffee/src/theme/image_sources.dart';
+import 'package:siberian_coffee/src/theme/icons_source.dart';
 
 class OrderBottomSheet extends StatelessWidget {
   final OrderBloc orderBloc;
@@ -45,7 +45,7 @@ class OrderBottomSheet extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   icon: Image.asset(
-                    ImageSources.iconDelete,
+                    IconsSource.iconDelete,
                     width: 24,
                     height: 24,
                   ),

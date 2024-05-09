@@ -22,11 +22,12 @@ class AddressesBloc extends Bloc<AddressesEvent, AddressesState> {
   void _loadAddresses(AddressesLoadAddressesEvent event, Emitter emit) async {
     emit(AddressesLoadingState());
     List<Address> addresses = await _addressRepository.loadAddresses();
-    Address? userCoffeeShopAddress = _userRepository.loadUserCoffeeShopAddress();
+    Address? userCoffeeShopAddress =
+        _userRepository.loadUserCoffeeShopAddress();
     if (addresses.isNotEmpty) {
-      userCoffeeShopAddress == null ? _userRepository.saveUserCoffeeShopAddress(
-        address: addresses.first,
-      ) : null;
+      if (userCoffeeShopAddress == null || !addresses.contains(userCoffeeShopAddress)) {
+        _userRepository.saveUserCoffeeShopAddress(address: addresses.first);
+      }
     }
     emit(AddressesLoadedState(addresses: addresses));
   }
