@@ -1,10 +1,14 @@
 import 'package:siberian_coffee/src/features/menu/data/data_sources/savable/savable_user_data_source.dart';
+import 'package:siberian_coffee/src/features/menu/models/address.dart';
+import 'package:siberian_coffee/src/features/menu/models/dto/address/address_dto.dart';
 import 'package:siberian_coffee/src/features/menu/models/user.dart';
-import 'package:siberian_coffee/src/features/menu/utils/user_mapper.dart';
+import 'package:siberian_coffee/src/features/menu/utils/address_mapper.dart';
 
 abstract interface class IUserRepository {
-  User? loadUser();
-  Future<void> saveUser(User user);
+  User loadUser();
+  Address? loadUserCoffeeShopAddress();
+  Future<void> saveUser({required User user});
+  Future<void> saveUserCoffeeShopAddress({required Address address});
 }
 
 class UserRepository implements IUserRepository {
@@ -15,16 +19,30 @@ class UserRepository implements IUserRepository {
   }) : _preferencesUserDataSource = preferencesUserDataSource;
 
   @override
-  User? loadUser() {
-    try {
-      return _preferencesUserDataSource.loadUser().toModel();
-    } catch (_) {
-      return null;
+  User loadUser() {
+    AddressDto? userCoffeeShopAddress =
+        _preferencesUserDataSource.loadUserCoffeeShopAddress();
+    return User(userCoffeeShopAddress: userCoffeeShopAddress?.toModel());
+  }
+
+  @override
+  Address? loadUserCoffeeShopAddress() {
+    return _preferencesUserDataSource.loadUserCoffeeShopAddress()?.toModel();
+  }
+
+  @override
+  Future<void> saveUser({required User user}) async {
+    if (user.userCoffeeShopAddress != null) {
+      await _preferencesUserDataSource.saveUserCoffeeShopAddress(
+        addressDto: user.userCoffeeShopAddress!.toDto(),
+      );
     }
   }
 
   @override
-  Future<void> saveUser(User user) async {
-    await _preferencesUserDataSource.saveUser(user: user.toDto());
+  Future<void> saveUserCoffeeShopAddress({required Address address}) async {
+    await _preferencesUserDataSource.saveUserCoffeeShopAddress(
+      addressDto: address.toDto(),
+    );
   }
 }

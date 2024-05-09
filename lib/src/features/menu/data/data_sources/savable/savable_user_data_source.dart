@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:siberian_coffee/src/features/menu/models/dto/user/user_dto.dart';
+import 'package:siberian_coffee/src/features/menu/models/dto/address/address_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class ISavableUserDataSource {
-  UserDto loadUser();
-  Future<void> saveUser({required UserDto user});
+  AddressDto? loadUserCoffeeShopAddress();
+  Future<void> saveUserCoffeeShopAddress({required AddressDto addressDto});
 }
 
 class PreferencesUserDataSource implements ISavableUserDataSource {
@@ -16,12 +16,19 @@ class PreferencesUserDataSource implements ISavableUserDataSource {
   }) : _prefs = prefs;
 
   @override
-  UserDto loadUser() {
-    return UserDto.fromJson(json.decode(_prefs.getString('user_data') ?? ""));
+  AddressDto? loadUserCoffeeShopAddress() {
+    String? userCoffeeShopAddress = _prefs.getString('userCoffeeShopAddress');
+    if (userCoffeeShopAddress != null) {
+      return AddressDto.fromJson(json.decode(userCoffeeShopAddress));
+    }
+    return null;
   }
 
   @override
-  Future<void> saveUser({required UserDto user}) async {
-    await _prefs.setString('user_data', json.encode(user.toJson()));
+  Future<void> saveUserCoffeeShopAddress({required AddressDto addressDto}) async {
+    await _prefs.setString(
+      'userCoffeeShopAddress', 
+      json.encode(addressDto.toJson()),
+    );
   }
 }

@@ -22,6 +22,7 @@ class MenuScreen extends StatelessWidget {
   build(BuildContext context) {
     AddressesBloc addressesBloc = AddressesBloc(
       addressRepository: repositories["address"],
+      userRepository: repositories["user"],
     )..add(AddressesLoadAddressesEvent());
     CategoriesBloc categoriesBloc = CategoriesBloc(
       categoryRepository: repositories["category"],
@@ -35,6 +36,7 @@ class MenuScreen extends StatelessWidget {
     )..add(MenuScrollAddContentListenerEvent());
     OrderBloc orderBloc = OrderBloc(orderRepository: repositories["order"]);
     UserBloc userBloc = UserBloc(
+      addressesBloc: addressesBloc,
       userRepository: repositories["user"],
     );
     return MultiBlocProvider(
