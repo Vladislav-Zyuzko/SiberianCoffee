@@ -122,6 +122,7 @@ class _MapScreenState extends State<MapScreen> {
         )
       ),
       onTap: (_, __) async {
+        _moveCameraToLocation(address.toPoint());
         final result = await showModalBottomSheet(
           context: context, 
           builder: (context) => PlacemarkBottomSheet(choosedAddress: address),
