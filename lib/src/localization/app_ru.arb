@@ -9,5 +9,6 @@
     "submitOrder": "Оформить заказ",
     "orderCreated": "Заказ создан",
     "orderWithError": "Возникла ошибка при заказе",
-    "placemarkChoose": "Выбрать"
+    "placemarkChoose": "Выбрать",
+    "ourCoffeeShops": "Наши кофейни"
 }

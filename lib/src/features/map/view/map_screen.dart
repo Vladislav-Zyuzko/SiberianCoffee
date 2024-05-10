@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/map/services/location_service.dart';
+import 'package:siberian_coffee/src/features/map/view/addresses_screen.dart';
 import 'package:siberian_coffee/src/features/map/view/widgets/map_button.dart';
 import 'package:siberian_coffee/src/features/map/view/widgets/placemark_bottom_sheet.dart';
 import 'package:siberian_coffee/src/features/menu/models/address.dart';
@@ -58,7 +59,19 @@ class _MapScreenState extends State<MapScreen> {
               const Spacer(),
               MapButton(
                 iconUrl: IconsSource.iconMap, 
-                onTap: () => {},
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddressesScreeen(
+                        addresses: widget.coffeeShopAddresses,
+                      )
+                    )
+                  );
+                  if (result is Address && context.mounted) {
+                    Navigator.pop(context, result);
+                  }
+                },
               ),
             ],
           ),
@@ -114,7 +127,6 @@ class _MapScreenState extends State<MapScreen> {
           builder: (context) => PlacemarkBottomSheet(choosedAddress: address),
         );
         if (result is Address && context.mounted) {
-          print("#############################################");
           Navigator.pop(context, result);
         }
       },

@@ -35,7 +35,6 @@ class CoffeeShopAddressPanel extends StatelessWidget {
               ),
             );
             if (result is Address) {
-              print("***************************************************************");
               userBloc.add(UserSaveAddressEvent(
                   userCoffeeShopAddress: result,
               ));
