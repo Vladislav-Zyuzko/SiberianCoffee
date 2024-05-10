@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/features/map/services/location_service.dart';
 import 'package:siberian_coffee/src/features/map/view/widgets/map_button.dart';
+import 'package:siberian_coffee/src/features/map/view/widgets/placemark_bottom_sheet.dart';
 import 'package:siberian_coffee/src/features/menu/models/address.dart';
 import 'package:siberian_coffee/src/theme/icons_source.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -41,7 +42,7 @@ class _MapScreenState extends State<MapScreen> {
           },
           mapObjects: _getPlacemarkObjects(
             context,
-            widget.coffeeShopAddresses.map((address) => address.toPoint()).toList()
+            widget.coffeeShopAddresses,
           ),
         ),
         Padding(
@@ -94,10 +95,10 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  List<PlacemarkMapObject> _getPlacemarkObjects(BuildContext context, List<Point> points) {
-    return points.map((point) => PlacemarkMapObject(
-      mapId: MapObjectId('CoffeeShop: $point'), 
-      point: point,
+  List<PlacemarkMapObject> _getPlacemarkObjects(BuildContext context, List<Address> addresses) {
+    return addresses.map((address) => PlacemarkMapObject(
+      mapId: MapObjectId('CoffeeShop: ${address.address}'), 
+      point: address.toPoint(),
       opacity: 1,
       icon: PlacemarkIcon.single(
         PlacemarkIconStyle(
@@ -107,6 +108,16 @@ class _MapScreenState extends State<MapScreen> {
           scale: 2.5,
         )
       ),
+      onTap: (_, __) async {
+        final result = await showModalBottomSheet(
+          context: context, 
+          builder: (context) => PlacemarkBottomSheet(choosedAddress: address),
+        );
+        if (result is Address && context.mounted) {
+          print("#############################################");
+          Navigator.pop(context, result);
+        }
+      },
     )).toList();
   }
 }

@@ -62,213 +62,216 @@ class MenuScreen extends StatelessWidget {
         )
       ],
       child: Scaffold(
-        body: BlocBuilder<ProductsBloc, ProductsState>(
-          builder: (context, state) {
-            return state is ProductsLoadedState
-            ? Stack(
-                children: [
-                  CustomScrollView(
-                    controller:
-                        menuScrollBloc.state.contentScrollController,
-                    slivers: <Widget>[
-                      SliverAppBar(
-                        surfaceTintColor: AppColors.primaryWhite,
-                        pinned: true,
-                        collapsedHeight: 106,
-                        backgroundColor: AppColors.dimWhite,
-                        flexibleSpace: Padding(
-                          padding: const EdgeInsets.only(left: 10, top: 40),
-                          child: Column(
-                            children: [
-                              BlocBuilder<UserBloc, UserState>(builder: (context, state) {
-                                final addressesState = context.watch<AddressesBloc>().state;
-                                if (addressesState is AddressesLoadedState) {
-                                  return state is UserLoadedState
-                                    ? state.user.userCoffeeShopAddress != null
-                                      ? CoffeeShopAddressPanel(
-                                        userCoffeeShopAddress: state.user.userCoffeeShopAddress!, 
-                                        coffeeShopsAddresses: addressesState.addresses,
-                                      )
-                                      : const Placeholder()
-                                    : const Placeholder();
-                                }
-                                return const Placeholder();
-                              }),
-                              const Padding(padding: EdgeInsets.only(top: 10)),
-                              SizedBox(
-                                height: 36,
-                                child: BlocBuilder<CategoriesBloc,
-                                    CategoriesState>(
-                                  builder: (context, state) {
-                                    return state is CategoriesLoadedState
-                                    ? ListView.separated(
-                                        cacheExtent: double.infinity,
-                                        separatorBuilder: ((_, __) {
-                                          return const Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10),
-                                          );
-                                        }),
-                                        physics: state
-                                                .categoriesIsAnimated
-                                            ? const NeverScrollableScrollPhysics()
-                                            : null,
-                                        controller: categoriesBloc
-                                            .appBarScrollController,
-                                        scrollDirection:
-                                            Axis.horizontal,
-                                        itemCount:
-                                            state.categoriesList.length,
-                                        itemBuilder: ((context, index) {
-                                          return CategoryButton(
-                                            key: state
-                                                    .categoryButtonsKeys[
-                                                state.orderCategories[
-                                                    index]],
-                                            onTap: state
-                                                    .categoriesIsAnimated
-                                                ? () => {}
-                                                : () {
-                                                    menuScrollBloc.add(
-                                                      MenuScrollShowActiveCategoryEvent(
-                                                        categoryKey: state
-                                                                .categoriesKeys[
-                                                            state.orderCategories[
-                                                                index]],
-                                                      ),
-                                                    );
-                                                    categoriesBloc.add(
-                                                      CategoriesSetActiveCategoryEvent(
-                                                          activeIndex: index,
-                                                      ),
-                                                    );
-                                                  },
-                                            categoryName: state
-                                                .categoriesList[state
-                                                        .orderCategories[
-                                                    index]]
-                                                .categoryName,
-                                            active: index ==
-                                                state
-                                                    .activeCategoryIndex,
-                                          );
-                                        }),
-                                      )
-                                    : const CircularProgressIndicator();
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ...List.generate(
-                        state.categoriesList.length,
-                        (index) {
-                          List<Product> categoryProductList = state
-                              .productList // Фильтруем лист по виду продукта
-                              .where((product) =>
-                                  product.categoryId ==
-                                  state.categoriesList[index].categoryId)
-                              .toList();
-                          return [
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 10),
-                                child: BlocBuilder<CategoriesBloc,
-                                    CategoriesState>(
-                                  builder: (context, state) {
-                                    return state is CategoriesLoadedState
-                                        ? Text(
-                                            state.categoriesList[index]
-                                                .categoryName,
-                                            key:
-                                                state.categoriesKeys[index],
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge,
-                                          )
+        body: Builder(
+          builder: (context) {
+            ProductsState productsState = context.watch<ProductsBloc>().state;
+            UserState userState = context.watch<UserBloc>().state;
+            return productsState is ProductsLoadedState && userState is UserLoadedState
+                ? Stack(
+                    children: [
+                      CustomScrollView(
+                        controller:
+                            menuScrollBloc.state.contentScrollController,
+                        slivers: <Widget>[
+                          SliverAppBar(
+                            surfaceTintColor: AppColors.primaryWhite,
+                            pinned: true,
+                            collapsedHeight: 106,
+                            backgroundColor: AppColors.dimWhite,
+                            flexibleSpace: Padding(
+                              padding: const EdgeInsets.only(left: 10, top: 40),
+                              child: Column(
+                                children: [
+                                  BlocBuilder<AddressesBloc, AddressesState>(
+                                    builder: (context, state) {
+                                      return state is AddressesLoadedState 
+                                        ? CoffeeShopAddressPanel(
+                                                userCoffeeShopAddress: userState
+                                                    .user
+                                                    .userCoffeeShopAddress!,
+                                                coffeeShopsAddresses:
+                                                    state.addresses,
+                                              )
                                         : const Placeholder();
-                                  },
+                                    }
+                                  ),
+                                  const Padding(
+                                      padding: EdgeInsets.only(top: 10)),
+                                  SizedBox(
+                                    height: 36,
+                                    child: BlocBuilder<CategoriesBloc,
+                                        CategoriesState>(
+                                      builder: (context, state) {
+                                        return state is CategoriesLoadedState
+                                            ? ListView.separated(
+                                                cacheExtent: double.infinity,
+                                                separatorBuilder: ((_, __) {
+                                                  return const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
+                                                  );
+                                                }),
+                                                physics: state
+                                                        .categoriesIsAnimated
+                                                    ? const NeverScrollableScrollPhysics()
+                                                    : null,
+                                                controller: categoriesBloc
+                                                    .appBarScrollController,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount:
+                                                    state.categoriesList.length,
+                                                itemBuilder: ((context, index) {
+                                                  return CategoryButton(
+                                                    key: state
+                                                            .categoryButtonsKeys[
+                                                        state.orderCategories[
+                                                            index]],
+                                                    onTap: state
+                                                            .categoriesIsAnimated
+                                                        ? () => {}
+                                                        : () {
+                                                            menuScrollBloc.add(
+                                                              MenuScrollShowActiveCategoryEvent(
+                                                                categoryKey: state
+                                                                        .categoriesKeys[
+                                                                    state.orderCategories[
+                                                                        index]],
+                                                              ),
+                                                            );
+                                                            categoriesBloc.add(
+                                                              CategoriesSetActiveCategoryEvent(
+                                                                activeIndex:
+                                                                    index,
+                                                              ),
+                                                            );
+                                                          },
+                                                    categoryName: state
+                                                        .categoriesList[state
+                                                                .orderCategories[
+                                                            index]]
+                                                        .categoryName,
+                                                    active: index ==
+                                                        state
+                                                            .activeCategoryIndex,
+                                                  );
+                                                }),
+                                              )
+                                            : const CircularProgressIndicator();
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          ...List.generate(
+                            productsState.categoriesList.length,
+                            (index) {
+                              List<Product> categoryProductList = productsState
+                                  .productList // Фильтруем лист по виду продукта
+                                  .where((product) =>
+                                      product.categoryId ==
+                                      productsState.categoriesList[index].categoryId)
+                                  .toList();
+                              return [
+                                SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 10),
+                                    child: BlocBuilder<CategoriesBloc,
+                                        CategoriesState>(
+                                      builder: (context, state) {
+                                        return state is CategoriesLoadedState
+                                            ? Text(
+                                                state.categoriesList[index]
+                                                    .categoryName,
+                                                key:
+                                                    state.categoriesKeys[index],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge,
+                                              )
+                                            : const Placeholder();
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            SliverGrid(
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200.0,
-                                mainAxisExtent: 250,
-                                mainAxisSpacing: 10.0,
-                                crossAxisSpacing: 10.0,
-                                childAspectRatio: 1.0,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return ProductCard(
-                                      product: categoryProductList[index]);
-                                },
-                                childCount: categoryProductList.length,
-                              ),
-                            ),
-                          ];
-                        },
-                      ).expand((element) => element).toList(),
-                    ],
-                  ),
-                  BlocBuilder<OrderBloc, OrderState>(
-                    builder: (context, state) {
-                      if (state is OrderSendSuccessState ||
-                          state is OrderSendErrorState) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 24),
-                              backgroundColor: AppColors.darkGrey7D,
-                              content: Text(
-                                state is OrderSendSuccessState
-                                    ? AppLocalizations.of(context)!
-                                        .orderCreated
-                                    : AppLocalizations.of(context)!
-                                        .orderWithError,
-                                style:
-                                    Theme.of(context).textTheme.labelMedium,
-                              ),
+                                SliverGrid(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 200.0,
+                                    mainAxisExtent: 250,
+                                    mainAxisSpacing: 10.0,
+                                    crossAxisSpacing: 10.0,
+                                    childAspectRatio: 1.0,
+                                  ),
+                                  delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                      return ProductCard(
+                                          product: categoryProductList[index]);
+                                    },
+                                    childCount: categoryProductList.length,
+                                  ),
+                                ),
+                              ];
+                            },
+                          ).expand((element) => element).toList(),
+                        ],
+                      ),
+                      BlocBuilder<OrderBloc, OrderState>(
+                        builder: (context, state) {
+                          if (state is OrderSendSuccessState ||
+                              state is OrderSendErrorState) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 24),
+                                  backgroundColor: AppColors.darkGrey7D,
+                                  content: Text(
+                                    state is OrderSendSuccessState
+                                        ? AppLocalizations.of(context)!
+                                            .orderCreated
+                                        : AppLocalizations.of(context)!
+                                            .orderWithError,
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ),
+                              );
+                            });
+                          }
+                          bool orderActive = state is OrderActiveState;
+                          return AnimatedPositioned(
+                            top: MediaQuery.of(context).size.height * 0.9,
+                            right: orderActive ? 20 : -99,
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.bounceOut,
+                            child: OrderDetailsButton(
+                              onPressed: orderActive
+                                  ? () => {
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: ((BuildContext context) {
+                                            return OrderBottomSheet(
+                                              orderBloc: orderBloc,
+                                            );
+                                          }),
+                                        )
+                                      }
+                                  : () => {},
+                              orderAmount: orderActive ? state.amountOrder : 0,
                             ),
                           );
-                        });
-                      }
-                      bool orderActive = state is OrderActiveState;
-                      return AnimatedPositioned(
-                        top: MediaQuery.of(context).size.height * 0.9,
-                        right: orderActive ? 20 : -99,
-                        duration: const Duration(milliseconds: 800),
-                        curve: Curves.bounceOut,
-                        child: OrderDetailsButton(
-                          onPressed: orderActive
-                              ? () => {
-                                    showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      context: context,
-                                      builder: ((BuildContext context) {
-                                        return OrderBottomSheet(
-                                          orderBloc: orderBloc,
-                                        );
-                                      }),
-                                    )
-                                  }
-                              : () => {},
-                          orderAmount: orderActive ? state.amountOrder : 0,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
-              );
+                        },
+                      ),
+                    ],
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  );
           },
         ),
       ),

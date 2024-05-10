@@ -25,10 +25,20 @@ class AddressesBloc extends Bloc<AddressesEvent, AddressesState> {
     Address? userCoffeeShopAddress =
         _userRepository.loadUserCoffeeShopAddress();
     if (addresses.isNotEmpty) {
-      if (userCoffeeShopAddress == null || !addresses.contains(userCoffeeShopAddress)) {
+      if (userCoffeeShopAddress == null ||
+          !containAddress(addresses, userCoffeeShopAddress)) {
         _userRepository.saveUserCoffeeShopAddress(address: addresses.first);
       }
     }
     emit(AddressesLoadedState(addresses: addresses));
+  }
+
+  bool containAddress(List<Address> addresses, Address userAddress) {
+    for (Address address in addresses) {
+      if (address.lat == userAddress.lat && address.lng == userAddress.lng) {
+        return true;
+      }
+    }
+    return false;
   }
 }

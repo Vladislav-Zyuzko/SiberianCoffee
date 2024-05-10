@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/addresses_bloc/addresses_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/data/user_repository.dart';
+import 'package:siberian_coffee/src/features/menu/models/address.dart';
 import 'package:siberian_coffee/src/features/menu/models/user.dart';
 
 part 'user_event.dart';
@@ -16,9 +17,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({
     required IUserRepository userRepository,
     required AddressesBloc addressesBloc,
-  }): _userRepository = userRepository, _addressesBloc = addressesBloc,
-  super(UserEmptyState()) {
+  })  : _userRepository = userRepository,
+        _addressesBloc = addressesBloc,
+        super(UserEmptyState()) {
     on<UserLoadUserEvent>(_loadUser);
+    on<UserSaveAddressEvent>(_saveUserAddress);
     _addressesBlocSubscription = _addressesBloc.stream.listen((state) {
       if (state is AddressesLoadedState && this.state is UserEmptyState) {
         add(UserLoadUserEvent());
@@ -34,6 +37,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   void _loadUser(UserLoadUserEvent event, Emitter emit) {
     emit(UserLoadingState());
+    User user = _userRepository.loadUser();
+    emit(UserLoadedState(user: user));
+  }
+
+  void _saveUserAddress(UserSaveAddressEvent event, Emitter emit) async {
+    emit(UserLoadingState());
+    await _userRepository.saveUserCoffeeShopAddress(
+      address: event.userCoffeeShopAddress,
+    );
     User user = _userRepository.loadUser();
     emit(UserLoadedState(user: user));
   }

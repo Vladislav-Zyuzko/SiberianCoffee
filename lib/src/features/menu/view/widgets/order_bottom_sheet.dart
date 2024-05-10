@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siberian_coffee/src/common/widgets/sc_bottom_sheet.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/order_divider.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/product_image.dart';
@@ -14,22 +15,11 @@ class OrderBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     OrderActiveState orderState = orderBloc.state as OrderActiveState;
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.92,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          const Padding(padding: EdgeInsets.only(top: 12)),
-          const DecoratedBox(
-            decoration: BoxDecoration(
-                color: AppColors.lightGreyD9,
-                borderRadius: BorderRadius.all(Radius.circular(2))),
-            child: SizedBox(
-              height: 4,
-              width: 48,
-            ),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
+    return ScBottomSheet(
+      height: MediaQuery.of(context).size.height * 0.92, 
+      buttonText: AppLocalizations.of(context)!.submitOrder, 
+      contentWidgets: [
+        const Padding(padding: EdgeInsets.only(top: 20)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -112,42 +102,11 @@ class OrderBottomSheet extends StatelessWidget {
             ),
           ),
           const OrderDivider(),
-          Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(AppColors.primaryBlue),
-                    overlayColor:
-                        MaterialStateProperty.all<Color>(AppColors.darkBlue),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    fixedSize: MaterialStateProperty.all<Size>(
-                      Size(MediaQuery.of(context).size.width * 0.94, 56),
-                    ),
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    orderBloc.add(OrderSendOrderEvent());
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)!.submitOrder,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      ], 
+      onPressed: () {
+        orderBloc.add(OrderSendOrderEvent());
+        Navigator.pop(context);
+      },
     );
   }
 }
