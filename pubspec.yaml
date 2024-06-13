@@ -27,6 +27,9 @@ dependencies:
   shared_preferences: ^2.2.3
   yandex_mapkit: ^4.0.2
   geolocator: ^11.0.0
+  firebase_messaging: ^15.0.1
+  flutter_local_notifications: ^17.1.2
+  firebase_core: ^3.1.0
 
 dev_dependencies:
   flutter_test:
