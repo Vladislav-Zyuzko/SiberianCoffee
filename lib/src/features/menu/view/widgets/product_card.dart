@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/product_image.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/purchase_controll_panel.dart';
@@ -17,20 +18,21 @@ class ProductCard extends StatelessWidget {
         color: AppColors.primaryWhite,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
-           BoxShadow(
+          BoxShadow(
             color: AppColors.dimBlack,
             blurRadius: 4,
             spreadRadius: -1.5,
           ),
-        ]
+        ],
       ),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.asset(
-            product.imagePath,
-            height: 100,
+          ProductImage(
+            imagePath: product.imagePath,
+            imageHeight: 100,
+            linearGradient: AppColors.shimmerGradient,
           ),
           Text(
             product.productName,
@@ -39,7 +41,7 @@ class ProductCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           ),
-          PurchaseControllPanel(productCost: product.productCost)
+          PurchaseControllPanel(product: product)
         ],
       ),
     );

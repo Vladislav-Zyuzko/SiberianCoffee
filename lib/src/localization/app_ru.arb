@@ -4,5 +4,9 @@
     "categoryCoffeeWithMilk": "Кофе с молоком",
     "categoryTeaDrink": "Чай",
     "categoryAuthorDrinks": "Авторские напитки",
-    "shortRub" : "руб"
+    "shortRub": "руб",
+    "yourOrder": "Ваш заказ",
+    "submitOrder": "Оформить заказ",
+    "orderCreated": "Заказ создан",
+    "orderWithError": "Возникла ошибка при заказе"
 }

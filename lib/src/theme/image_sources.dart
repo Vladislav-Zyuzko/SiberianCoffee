@@ -33,4 +33,7 @@ sealed class ImageSources {
   static const teaMint = "${_baseImagesUrl}tea_mint.png";
   static const teaRaspberry = "${_baseImagesUrl}tea_raspberry.png";
   static const teaRed = "${_baseImagesUrl}tea_red.png";
+
+  static const iconOrder = "${_baseImagesUrl}icon_order.png";
+  static const iconDelete = "${_baseImagesUrl}icon_delete.png";
 }

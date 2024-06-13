@@ -1,40 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
+import 'package:siberian_coffee/src/features/menu/models/product.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PurchaseControllPanel extends StatefulWidget {
-  final double productCost;
+class PurchaseControllPanel extends StatelessWidget {
+  final Product product;
 
-  const PurchaseControllPanel({super.key, required this.productCost});
-
-  @override
-  State<PurchaseControllPanel> createState() => _PurchaseControllerState();
-}
-
-class _PurchaseControllerState extends State<PurchaseControllPanel> {
-  int currentProductCount = 0;
-
-  void incrementProductCount() => setState(() {
-        currentProductCount != 10 ? currentProductCount += 1 : null;
-      });
-
-  void decrementProductCount() => setState(() => currentProductCount -= 1);
+  const PurchaseControllPanel({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      duration: const Duration(milliseconds: 250),
-      firstChild: PurchaseControllBuyButton(
-          onTap: incrementProductCount,
-          productCost: "${widget.productCost.toInt()}"),
-      secondChild: PurchaseController(
-        currentProductCount: currentProductCount,
-        incrementFunction: incrementProductCount,
-        decrementFunction: decrementProductCount,
-      ),
-      crossFadeState: currentProductCount == 0
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
+    OrderBloc orderBloc = BlocProvider.of<OrderBloc>(context);
+    return BlocBuilder<OrderBloc, OrderState>(
+      builder: (context, state) {
+        int currentProductCount = state is OrderActiveState
+            ? state.orderList.where((product) => product == this.product).length
+            : 0;
+        return AnimatedCrossFade(
+          duration: const Duration(milliseconds: 250),
+          firstChild: PurchaseControllBuyButton(
+              onTap: () =>
+                  orderBloc.add(OrderAddProductEvent(product: product)),
+              productCost: "${product.productCost.toInt()}"),
+          secondChild: PurchaseController(
+            currentProductCount: currentProductCount,
+            incrementFunction: () => orderBloc.add(OrderAddProductEvent(product: product)),
+            decrementFunction: () => orderBloc.add(OrderRemoveProductEvent(product: product)),
+          ),
+          crossFadeState: currentProductCount == 0
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+        );
+      },
     );
   }
 }
@@ -52,13 +51,14 @@ class PurchaseControllBuyButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
-        highlightColor: AppColors.darkBlue,
+        highlightColor: AppColors.middleBlue,
         borderRadius: BorderRadius.circular(16),
         child: SizedBox(
           height: 24,
           width: 116,
           child: Center(
-            child: Text("$productCost ${AppLocalizations.of(context)!.shortRub}",
+            child: Text(
+                "$productCost ${AppLocalizations.of(context)!.shortRub}",
                 style: Theme.of(context).textTheme.bodySmall),
           ),
         ),
@@ -122,7 +122,7 @@ class PurchaseControllButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       color: AppColors.primaryBlue,
       child: InkWell(
-        highlightColor: AppColors.darkBlue,
+        highlightColor: AppColors.middleBlue,
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: SizedBox(
