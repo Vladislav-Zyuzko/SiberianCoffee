@@ -8,7 +8,4 @@ class Category extends Classifiable {
     required this.categoryName,
   }) : super(categoryId: categoryId);
 
-  factory Category.fromJson(Map<String, dynamic> map) {
-    return Category(categoryId: map['id'], categoryName: map['slug']);
-  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:siberian_coffee/src/theme/app_colors.dart';
-import 'package:siberian_coffee/src/theme/image_sources.dart';
+import 'package:siberian_coffee/src/theme/icons_source.dart';
 
 class OrderDetailsButton extends StatelessWidget {
   final double orderAmount;
@@ -50,7 +50,7 @@ class OrderDetailsButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset(
-                ImageSources.iconOrder,
+                IconsSource.iconOrder,
                 width: 18,
                 height: 21,
               ),

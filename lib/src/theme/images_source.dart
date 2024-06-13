@@ -1,4 +1,4 @@
-sealed class ImageSources {
+sealed class ImagesSource {
   static const _baseImagesUrl = "assets/images/";
 
   static const authorCoffeeCaramel =

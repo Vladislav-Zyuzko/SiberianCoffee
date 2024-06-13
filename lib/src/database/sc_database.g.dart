@@ -3,6 +3,228 @@
 part of 'sc_database.dart';
 
 // ignore_for_file: type=lint
+class $AddressTableTable extends AddressTable
+    with TableInfo<$AddressTableTable, AddressTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AddressTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _addressMeta =
+      const VerificationMeta('address');
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+      'address', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _latMeta = const VerificationMeta('lat');
+  @override
+  late final GeneratedColumn<double> lat = GeneratedColumn<double>(
+      'lat', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _lngMeta = const VerificationMeta('lng');
+  @override
+  late final GeneratedColumn<double> lng = GeneratedColumn<double>(
+      'lng', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [address, lat, lng];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'address_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<AddressTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+    } else if (isInserting) {
+      context.missing(_addressMeta);
+    }
+    if (data.containsKey('lat')) {
+      context.handle(
+          _latMeta, lat.isAcceptableOrUnknown(data['lat']!, _latMeta));
+    } else if (isInserting) {
+      context.missing(_latMeta);
+    }
+    if (data.containsKey('lng')) {
+      context.handle(
+          _lngMeta, lng.isAcceptableOrUnknown(data['lng']!, _lngMeta));
+    } else if (isInserting) {
+      context.missing(_lngMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  AddressTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AddressTableData(
+      address: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+      lat: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}lat'])!,
+      lng: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}lng'])!,
+    );
+  }
+
+  @override
+  $AddressTableTable createAlias(String alias) {
+    return $AddressTableTable(attachedDatabase, alias);
+  }
+}
+
+class AddressTableData extends DataClass
+    implements Insertable<AddressTableData> {
+  final String address;
+  final double lat;
+  final double lng;
+  const AddressTableData(
+      {required this.address, required this.lat, required this.lng});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['address'] = Variable<String>(address);
+    map['lat'] = Variable<double>(lat);
+    map['lng'] = Variable<double>(lng);
+    return map;
+  }
+
+  AddressTableCompanion toCompanion(bool nullToAbsent) {
+    return AddressTableCompanion(
+      address: Value(address),
+      lat: Value(lat),
+      lng: Value(lng),
+    );
+  }
+
+  factory AddressTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AddressTableData(
+      address: serializer.fromJson<String>(json['address']),
+      lat: serializer.fromJson<double>(json['lat']),
+      lng: serializer.fromJson<double>(json['lng']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'address': serializer.toJson<String>(address),
+      'lat': serializer.toJson<double>(lat),
+      'lng': serializer.toJson<double>(lng),
+    };
+  }
+
+  AddressTableData copyWith({String? address, double? lat, double? lng}) =>
+      AddressTableData(
+        address: address ?? this.address,
+        lat: lat ?? this.lat,
+        lng: lng ?? this.lng,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('AddressTableData(')
+          ..write('address: $address, ')
+          ..write('lat: $lat, ')
+          ..write('lng: $lng')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(address, lat, lng);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AddressTableData &&
+          other.address == this.address &&
+          other.lat == this.lat &&
+          other.lng == this.lng);
+}
+
+class AddressTableCompanion extends UpdateCompanion<AddressTableData> {
+  final Value<String> address;
+  final Value<double> lat;
+  final Value<double> lng;
+  final Value<int> rowid;
+  const AddressTableCompanion({
+    this.address = const Value.absent(),
+    this.lat = const Value.absent(),
+    this.lng = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AddressTableCompanion.insert({
+    required String address,
+    required double lat,
+    required double lng,
+    this.rowid = const Value.absent(),
+  })  : address = Value(address),
+        lat = Value(lat),
+        lng = Value(lng);
+  static Insertable<AddressTableData> custom({
+    Expression<String>? address,
+    Expression<double>? lat,
+    Expression<double>? lng,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (address != null) 'address': address,
+      if (lat != null) 'lat': lat,
+      if (lng != null) 'lng': lng,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AddressTableCompanion copyWith(
+      {Value<String>? address,
+      Value<double>? lat,
+      Value<double>? lng,
+      Value<int>? rowid}) {
+    return AddressTableCompanion(
+      address: address ?? this.address,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (lat.present) {
+      map['lat'] = Variable<double>(lat.value);
+    }
+    if (lng.present) {
+      map['lng'] = Variable<double>(lng.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AddressTableCompanion(')
+          ..write('address: $address, ')
+          ..write('lat: $lat, ')
+          ..write('lng: $lng, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $CategoryTableTable extends CategoryTable
     with TableInfo<$CategoryTableTable, CategoryTableData> {
   @override
@@ -506,6 +728,7 @@ class ProductTableCompanion extends UpdateCompanion<ProductTableData> {
 
 abstract class _$SiberianCoffeeDatabase extends GeneratedDatabase {
   _$SiberianCoffeeDatabase(QueryExecutor e) : super(e);
+  late final $AddressTableTable addressTable = $AddressTableTable(this);
   late final $CategoryTableTable categoryTable = $CategoryTableTable(this);
   late final $ProductTableTable productTable = $ProductTableTable(this);
   @override
@@ -513,5 +736,5 @@ abstract class _$SiberianCoffeeDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [categoryTable, productTable];
+      [addressTable, categoryTable, productTable];
 }

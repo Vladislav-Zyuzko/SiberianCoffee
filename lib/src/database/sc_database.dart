@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:siberian_coffee/src/database/tables/address_table.dart';
 import 'package:siberian_coffee/src/database/tables/category_table.dart';
 import 'package:siberian_coffee/src/database/tables/product_table.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/price/price_dto.dart';
@@ -14,7 +15,7 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'sc_database.g.dart';
 
-@DriftDatabase(tables: [CategoryTable, ProductTable])
+@DriftDatabase(tables: [AddressTable, CategoryTable, ProductTable])
 class SiberianCoffeeDatabase extends _$SiberianCoffeeDatabase {
   SiberianCoffeeDatabase() : super(_openConnection());
 

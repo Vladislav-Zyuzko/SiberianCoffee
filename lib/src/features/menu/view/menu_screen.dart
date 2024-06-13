@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:siberian_coffee/src/features/menu/bloc/addresses_bloc/addresses_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/categories_bloc/categories_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/menu_scroll_bloc/bloc/menu_scroll_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/order_bloc/order_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/bloc/products_bloc/bloc/products_bloc.dart';
+import 'package:siberian_coffee/src/features/menu/bloc/user_bloc/user_bloc.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
+import 'package:siberian_coffee/src/features/menu/view/widgets/coffee_shop_address_panel.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/order_bottom_sheet.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/order_details_button.dart';
 import 'package:siberian_coffee/src/features/menu/view/widgets/product_card.dart';
@@ -18,6 +21,10 @@ class MenuScreen extends StatelessWidget {
 
   @override
   build(BuildContext context) {
+    AddressesBloc addressesBloc = AddressesBloc(
+      addressRepository: repositories["address"],
+      userRepository: repositories["user"],
+    )..add(AddressesLoadAddressesEvent());
     CategoriesBloc categoriesBloc = CategoriesBloc(
       categoryRepository: repositories["category"],
     )..add(CategoriesLoadCategoriesEvent());
@@ -29,8 +36,15 @@ class MenuScreen extends StatelessWidget {
       categoriesBloc,
     )..add(MenuScrollAddContentListenerEvent());
     OrderBloc orderBloc = OrderBloc(orderRepository: repositories["order"]);
+    UserBloc userBloc = UserBloc(
+      addressesBloc: addressesBloc,
+      userRepository: repositories["user"],
+    );
     return MultiBlocProvider(
       providers: [
+        BlocProvider<AddressesBloc>(
+          create: (context) => addressesBloc,
+        ),
         BlocProvider<CategoriesBloc>(
           create: (context) => categoriesBloc,
         ),
@@ -42,12 +56,17 @@ class MenuScreen extends StatelessWidget {
         ),
         BlocProvider<OrderBloc>(
           create: (context) => orderBloc,
+        ),
+        BlocProvider<UserBloc>(
+          create: (context) => userBloc,
         )
       ],
       child: Scaffold(
-        body: BlocBuilder<ProductsBloc, ProductsState>(
-          builder: (context, state) {
-            return state is ProductsLoadedState
+        body: Builder(
+          builder: (context) {
+            ProductsState productsState = context.watch<ProductsBloc>().state;
+            UserState userState = context.watch<UserBloc>().state;
+            return productsState is ProductsLoadedState && userState is UserLoadedState
                 ? Stack(
                     children: [
                       CustomScrollView(
@@ -55,40 +74,61 @@ class MenuScreen extends StatelessWidget {
                             menuScrollBloc.state.contentScrollController,
                         slivers: <Widget>[
                           SliverAppBar(
+                            surfaceTintColor: AppColors.primaryWhite,
                             pinned: true,
-                            expandedHeight: 20,
+                            collapsedHeight: 106,
                             backgroundColor: AppColors.dimWhite,
                             flexibleSpace: Padding(
                               padding: const EdgeInsets.only(left: 10, top: 40),
-                              child: SizedBox(
-                                height: 36,
-                                child: BlocBuilder<CategoriesBloc,
-                                    CategoriesState>(
-                                  builder: (context, state) {
-                                    return state is CategoriesLoadedState
-                                        ? ListView.separated(
-                                            cacheExtent: double.infinity,
-                                            separatorBuilder: ((_, __) {
-                                              return const Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 10),
-                                              );
-                                            }),
-                                            physics: state.categoriesIsAnimated
-                                                ? const NeverScrollableScrollPhysics()
-                                                : null,
-                                            controller: categoriesBloc
-                                                .appBarScrollController,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount:
-                                                state.categoriesList.length,
-                                            itemBuilder: ((context, index) {
-                                              return CategoryButton(
-                                                key: state.categoryButtonsKeys[
-                                                    state.orderCategories[
-                                                        index]],
-                                                onTap:
-                                                    state.categoriesIsAnimated
+                              child: Column(
+                                children: [
+                                  BlocBuilder<AddressesBloc, AddressesState>(
+                                    builder: (context, state) {
+                                      return state is AddressesLoadedState 
+                                        ? CoffeeShopAddressPanel(
+                                                userCoffeeShopAddress: userState
+                                                    .user
+                                                    .userCoffeeShopAddress!,
+                                                coffeeShopsAddresses:
+                                                    state.addresses,
+                                              )
+                                        : const Placeholder();
+                                    }
+                                  ),
+                                  const Padding(
+                                      padding: EdgeInsets.only(top: 10)),
+                                  SizedBox(
+                                    height: 36,
+                                    child: BlocBuilder<CategoriesBloc,
+                                        CategoriesState>(
+                                      builder: (context, state) {
+                                        return state is CategoriesLoadedState
+                                            ? ListView.separated(
+                                                cacheExtent: double.infinity,
+                                                separatorBuilder: ((_, __) {
+                                                  return const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
+                                                  );
+                                                }),
+                                                physics: state
+                                                        .categoriesIsAnimated
+                                                    ? const NeverScrollableScrollPhysics()
+                                                    : null,
+                                                controller: categoriesBloc
+                                                    .appBarScrollController,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount:
+                                                    state.categoriesList.length,
+                                                itemBuilder: ((context, index) {
+                                                  return CategoryButton(
+                                                    key: state
+                                                            .categoryButtonsKeys[
+                                                        state.orderCategories[
+                                                            index]],
+                                                    onTap: state
+                                                            .categoriesIsAnimated
                                                         ? () => {}
                                                         : () {
                                                             menuScrollBloc.add(
@@ -101,33 +141,38 @@ class MenuScreen extends StatelessWidget {
                                                             );
                                                             categoriesBloc.add(
                                                               CategoriesSetActiveCategoryEvent(
-                                                                  activeIndex:
-                                                                      index),
+                                                                activeIndex:
+                                                                    index,
+                                                              ),
                                                             );
                                                           },
-                                                categoryName: state
-                                                    .categoriesList[state
-                                                        .orderCategories[index]]
-                                                    .categoryName,
-                                                active: index ==
-                                                    state.activeCategoryIndex,
-                                              );
-                                            }),
-                                          )
-                                        : const CircularProgressIndicator();
-                                  },
-                                ),
+                                                    categoryName: state
+                                                        .categoriesList[state
+                                                                .orderCategories[
+                                                            index]]
+                                                        .categoryName,
+                                                    active: index ==
+                                                        state
+                                                            .activeCategoryIndex,
+                                                  );
+                                                }),
+                                              )
+                                            : const CircularProgressIndicator();
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           ...List.generate(
-                            state.categoriesList.length,
+                            productsState.categoriesList.length,
                             (index) {
-                              List<Product> categoryProductList = state
+                              List<Product> categoryProductList = productsState
                                   .productList // Фильтруем лист по виду продукта
                                   .where((product) =>
                                       product.categoryId ==
-                                      state.categoriesList[index].categoryId)
+                                      productsState.categoriesList[index].categoryId)
                                   .toList();
                               return [
                                 SliverToBoxAdapter(
