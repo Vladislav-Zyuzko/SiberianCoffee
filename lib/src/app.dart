@@ -19,7 +19,10 @@ class SiberianCoffeeApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate
       ],
-      supportedLocales: AppLocalizations.supportedLocales,
+        supportedLocales: const [
+          Locale('ru'), // Russian
+          Locale('en'), // English
+        ],
       onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
       title: 'SiberianCoffee',
       theme: lightTheme,
