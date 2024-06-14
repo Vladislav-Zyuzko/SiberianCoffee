@@ -41,16 +41,16 @@ class ScBottomSheet extends StatelessWidget {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(AppColors.primaryBlue),
+                        WidgetStateProperty.all<Color>(AppColors.primaryBlue),
                     overlayColor:
-                        MaterialStateProperty.all<Color>(AppColors.darkBlue),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        WidgetStateProperty.all<Color>(AppColors.darkBlue),
+                    padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
                       const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    fixedSize: MaterialStateProperty.all<Size>(
+                    fixedSize: WidgetStateProperty.all<Size>(
                       Size(MediaQuery.of(context).size.width * 0.93, 56),
                     ),
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                    shape: WidgetStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),

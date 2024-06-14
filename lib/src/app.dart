@@ -6,7 +6,8 @@ import 'package:siberian_coffee/src/theme/theme.dart';
 
 class SiberianCoffeeApp extends StatelessWidget {
   final Map repositories;
-  const SiberianCoffeeApp({super.key, required this.repositories});
+  final Map apis;
+  const SiberianCoffeeApp({super.key, required this.repositories, required this.apis});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class SiberianCoffeeApp extends StatelessWidget {
       onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
       title: 'SiberianCoffee',
       theme: lightTheme,
-      home: MenuScreen(repositories: repositories),
+      home: MenuScreen(repositories: repositories, apis: apis),
     );
   }
 }

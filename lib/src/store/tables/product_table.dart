@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:siberian_coffee/src/database/tables/category_table.dart';
+import 'package:siberian_coffee/src/store/tables/category_table.dart';
 import 'package:siberian_coffee/src/features/menu/utils/price_dtos_converter.dart';
 
 class ProductTable extends Table {

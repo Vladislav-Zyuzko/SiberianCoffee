@@ -5,7 +5,7 @@ extension OrderMapper on Order {
   OrderDto toDto() {
     return OrderDto(
       positions: order,
-      token: "<FCM registration token>",
+      token: token,
     );
   }
 }

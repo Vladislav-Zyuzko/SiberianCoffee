@@ -17,7 +17,8 @@ import 'package:siberian_coffee/src/theme/app_colors.dart';
 
 class MenuScreen extends StatelessWidget {
   final Map repositories;
-  const MenuScreen({super.key, required this.repositories});
+  final Map apis;
+  const MenuScreen({super.key, required this.repositories, required this.apis});
 
   @override
   build(BuildContext context) {
@@ -35,7 +36,10 @@ class MenuScreen extends StatelessWidget {
     MenuScrollBloc menuScrollBloc = MenuScrollBloc(
       categoriesBloc,
     )..add(MenuScrollAddContentListenerEvent());
-    OrderBloc orderBloc = OrderBloc(orderRepository: repositories["order"]);
+    OrderBloc orderBloc = OrderBloc(
+      orderRepository: repositories["order"],
+      scSharedPreferenciesApi: apis["preferencies"]
+    );
     UserBloc userBloc = UserBloc(
       addressesBloc: addressesBloc,
       userRepository: repositories["user"],
