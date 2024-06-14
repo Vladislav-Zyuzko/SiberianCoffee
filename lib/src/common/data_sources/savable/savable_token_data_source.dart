@@ -18,7 +18,6 @@ class TokenDataSource implements ISavableTokenDataSource {
 
   @override
   Future<void> saveFcmToken({required String fcmToken}) async {
-    print("###########################################################${fcmToken}");
     await _prefs.setString(
       'fcmToken', 
       fcmToken,

@@ -33,7 +33,7 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     await dotenv.load(fileName: ".env");
     await restClient.init();
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     SiberianCoffeeDatabase scDatabase = SiberianCoffeeDatabase();

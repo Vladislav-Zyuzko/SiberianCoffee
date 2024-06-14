@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siberian_coffee/src/common/data_sources/savable/savable_token_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/models/order.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
@@ -75,7 +77,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         }
       }
       bool sendingSuccess = await _orderRepository.sendOrder(
-        Order(order: orderPositions),
+        Order(order: orderPositions, token: TokenDataSource(prefs: await SharedPreferences.getInstance()).loadFcmToken() ?? "<FCM Token>"),
       );
       sendingSuccess
           ? emit(OrderSendSuccessState())

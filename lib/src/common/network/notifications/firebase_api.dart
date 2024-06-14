@@ -23,7 +23,7 @@ class FirebaseApi {
 
   Future<void> initNotifications() async {
     try {
-      await _firebaseMessaging.requestPermission();
+      await _firebaseMessaging.requestPermission(provisional: true,);
       final String fCMToken = await _firebaseMessaging.getToken() ?? '';
       TokenDataSource(prefs: _prefs).saveFcmToken(fcmToken: fCMToken);
       initPushNotifications();
@@ -64,10 +64,9 @@ class FirebaseApi {
     });
   }
 
-  Future initLocalNotifications() async {
-    const iOS = DarwinInitializationSettings();
+  Future<void> initLocalNotifications() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const settings = InitializationSettings(android: android, iOS: iOS);
+    const settings = InitializationSettings(android: android);
 
     await _localNotifications.initialize(settings);
 
