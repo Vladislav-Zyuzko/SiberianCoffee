@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:siberian_coffee/src/database/sc_database.dart';
+import 'package:siberian_coffee/src/store/sc_database.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/address/address_dto.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/category/category_dto.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/product/product_dto.dart';

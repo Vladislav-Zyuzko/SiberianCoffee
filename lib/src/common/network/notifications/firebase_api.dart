@@ -3,15 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siberian_coffee/src/common/data_sources/savable/savable_token_data_source.dart';
+import 'package:siberian_coffee/src/store/api/sc_preferencies_api.dart';
 
 
 class FirebaseApi {
-  final SharedPreferences _prefs;
+  final IScPreferenciesApi _scSharedPreferenciesApi;
   final _firebaseMessaging = FirebaseMessaging.instance;
 
-  FirebaseApi({required SharedPreferences prefs}) : _prefs = prefs;
+  FirebaseApi({required IScPreferenciesApi scSharedPreferenciesApi}) 
+  : _scSharedPreferenciesApi = scSharedPreferenciesApi;
 
   final _androidChannel = const AndroidNotificationChannel(
     'high importance_channel',
@@ -25,7 +25,7 @@ class FirebaseApi {
     try {
       await _firebaseMessaging.requestPermission(provisional: true,);
       final String fCMToken = await _firebaseMessaging.getToken() ?? '';
-      TokenDataSource(prefs: _prefs).saveFcmToken(fcmToken: fCMToken);
+      _scSharedPreferenciesApi.saveFcmToken(fcmToken: fCMToken);
       initPushNotifications();
       initLocalNotifications();
     } on FirebaseException catch(e, stackTrace) {

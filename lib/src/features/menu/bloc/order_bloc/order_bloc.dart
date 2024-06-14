@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siberian_coffee/src/common/data_sources/savable/savable_token_data_source.dart';
+import 'package:siberian_coffee/src/store/api/sc_preferencies_api.dart';
 import 'package:siberian_coffee/src/features/menu/data/order_repository.dart';
 import 'package:siberian_coffee/src/features/menu/models/order.dart';
 import 'package:siberian_coffee/src/features/menu/models/product.dart';
@@ -11,9 +10,12 @@ part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final OrderRepository _orderRepository;
+  final IScPreferenciesApi _scSharedPreferenciesApi;
   OrderBloc({
-    required OrderRepository orderRepository
-  }) : _orderRepository = orderRepository, super(OrderEmptyState()) {
+    required OrderRepository orderRepository,
+    required IScPreferenciesApi scSharedPreferenciesApi,
+  }) : _orderRepository = orderRepository,
+       _scSharedPreferenciesApi = scSharedPreferenciesApi, super(OrderEmptyState()) {
     on<OrderAddProductEvent>(_addProduct);
     on<OrderRemoveProductEvent>(_removeProduct);
     on<OrderClearEvent>(_clearOrder);
@@ -77,7 +79,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         }
       }
       bool sendingSuccess = await _orderRepository.sendOrder(
-        Order(order: orderPositions, token: TokenDataSource(prefs: await SharedPreferences.getInstance()).loadFcmToken() ?? "<FCM Token>"),
+        Order(order: orderPositions, token: _scSharedPreferenciesApi.loadFcmToken() ?? "<FCM Token>"),
       );
       sendingSuccess
           ? emit(OrderSendSuccessState())
