@@ -1,0 +1,14 @@
+{
+    "title": "Siberian coffee house",
+    "categoryBlackCoffee": "Black coffee",
+    "categoryCoffeeWithMilk": "Coffee with milk",
+    "categoryTeaDrink": "Tea",
+    "categoryAuthorDrinks": "Author's drinks",
+    "shortRub": "rub",
+    "yourOrder": "Your order",
+    "submitOrder": "Submit order",
+    "orderCreated": "Order is created",
+    "orderWithError": "An error occurred while ordering",
+    "placemarkChoose": "Select",
+    "ourCoffeeShops": "Наши кофейни"
+}
