@@ -31,15 +31,15 @@ class OrderDetailsButton extends StatelessWidget {
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor:
-                WidgetStateProperty.all<Color>(AppColors.primaryBlue),
-            overlayColor: WidgetStateProperty.all<Color>(AppColors.darkBlue),
-            padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                MaterialStateProperty.all<Color>(AppColors.primaryBlue),
+            overlayColor: MaterialStateProperty.all<Color>(AppColors.darkBlue),
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
               const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             ),
-            minimumSize: WidgetStateProperty.all<Size>(
+            minimumSize: MaterialStateProperty.all<Size>(
               const Size(99, 45),
             ),
-            shape: WidgetStateProperty.all<OutlinedBorder>(
+            shape: MaterialStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
