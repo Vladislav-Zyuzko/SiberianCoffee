@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:siberian_coffee/src/database/tables/address_table.dart';
-import 'package:siberian_coffee/src/database/tables/category_table.dart';
-import 'package:siberian_coffee/src/database/tables/product_table.dart';
+import 'package:siberian_coffee/src/store/tables/address_table.dart';
+import 'package:siberian_coffee/src/store/tables/category_table.dart';
+import 'package:siberian_coffee/src/store/tables/product_table.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/price/price_dto.dart';
 import 'package:siberian_coffee/src/features/menu/utils/price_dtos_converter.dart';
 

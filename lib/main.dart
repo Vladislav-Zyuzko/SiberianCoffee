@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siberian_coffee/src/app.dart';
+import 'package:siberian_coffee/src/common/network/notifications/firebase_api.dart';
 import 'package:siberian_coffee/src/common/network/rest_client.dart';
-import 'package:siberian_coffee/src/database/api/sc_database_api.dart';
-import 'package:siberian_coffee/src/database/sc_database.dart';
+import 'package:siberian_coffee/src/store/api/sc_database_api.dart';
+import 'package:siberian_coffee/src/store/api/sc_preferencies_api.dart';
+import 'package:siberian_coffee/src/store/sc_database.dart';
 import 'package:siberian_coffee/src/features/menu/data/address_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/category_repository.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/addresses_data_source.dart';
@@ -30,10 +32,14 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     await dotenv.load(fileName: ".env");
     await restClient.init();
+    await Firebase.initializeApp();
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     SiberianCoffeeDatabase scDatabase = SiberianCoffeeDatabase();
     ScDatabaseApi scDatabaseApi = ScDatabaseApi(scDatabase: scDatabase);
+    ScSharedPreferencesApi scSharedPreferencesApi = ScSharedPreferencesApi();
+    FirebaseApi firebaseApi = FirebaseApi(scSharedPreferenciesApi: scSharedPreferencesApi);
+
+    firebaseApi.initNotifications();
 
     runApp(SiberianCoffeeApp(
       repositories: {
@@ -68,9 +74,12 @@ void main() {
         ),
         "user": UserRepository(
           preferencesUserDataSource: PreferencesUserDataSource(
-            prefs: prefs,
+           scSharedPreferenciesApi: scSharedPreferencesApi,
           ),
         )
+      },
+      apis: {
+        "preferencies": ScSharedPreferencesApi(),
       },
     ));
   }, (error, stack) {

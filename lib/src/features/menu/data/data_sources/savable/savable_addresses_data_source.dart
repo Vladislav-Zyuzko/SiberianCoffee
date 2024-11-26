@@ -1,4 +1,4 @@
-import 'package:siberian_coffee/src/database/api/sc_database_api.dart';
+import 'package:siberian_coffee/src/store/api/sc_database_api.dart';
 import 'package:siberian_coffee/src/features/menu/data/data_sources/addresses_data_source.dart';
 import 'package:siberian_coffee/src/features/menu/models/dto/address/address_dto.dart';
 
